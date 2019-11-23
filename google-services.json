@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "319505156188",
+    "firebase_url": "https://postit-b98db.firebaseio.com",
+    "project_id": "postit-b98db",
+    "storage_bucket": "postit-b98db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319505156188:android:b7d4a9c3f6957491ab7e99",
+        "android_client_info": {
+          "package_name": "com.first.postit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319505156188-qtgol1madj5c4lio8mm565u4fgmcsg72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcrBSxLg13cNTKb0uM7rs2kLmD6mpZGpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319505156188-qtgol1madj5c4lio8mm565u4fgmcsg72.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
