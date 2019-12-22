@@ -74,3 +74,10 @@
 
 # No subir google-services.json
 **/google-services.json
+
+# No subir AndroidManifest.xml
+**/src/debug/AndroidManifest.xml
+
+# No subir RAW
+**/RAW_main.dart
+**/RAW_widget.dart
