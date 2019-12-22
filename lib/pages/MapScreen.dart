@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase/model/postit.dart';
+import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -14,7 +16,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng _center = const LatLng(42.0, 0.0);
+  static const LatLng _center = const LatLng(41.388422, 2.185971);
 
   final Set<Marker> _markers = {};
 
@@ -41,6 +43,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
+    print(position.target);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -53,6 +56,14 @@ class _MapScreenState extends State<MapScreen> {
           ? MapType.satellite
           : MapType.normal;
     });
+  }
+
+  _displayCurrentLocation() async {
+    final location = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print("${location.latitude}, ${location.longitude}");
+    return LatLng(location.latitude, location.longitude);
   }
 
   @override
@@ -76,11 +87,12 @@ class _MapScreenState extends State<MapScreen> {
               }
               return Stack(
                 children: <Widget>[
+                  //Expanded(flex: 1, child: Container(color: Colors.green,)),
                   GoogleMap(
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: _center,
-                      zoom: 5.0,
+                      zoom: 10.0,
                     ),
                     mapType: _currentMapType,
                     markers: _markers,
@@ -91,22 +103,43 @@ class _MapScreenState extends State<MapScreen> {
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           FloatingActionButton(
                             heroTag: 'btn1',
                             onPressed: _onMapTypeButtonPressed,
                             materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.grey,
                             child: const Icon(Icons.map, size: 36.0),
                           ),
-                          SizedBox(height: 16.0),
+                          //height: 16.0
                           FloatingActionButton(
                             heroTag: 'btn2',
-                            onPressed: () => _onAddMarkerButtonPressed(),
+                            //onPressed: () => _onAddMarkerButtonPressed(),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (context) => NewPostScreen(
+                                          _displayCurrentLocation())))
+                                  .then((result) {
+                                if (result != null) {
+                                  setState(() {
+                                    //_receta.ingredientes = result;
+                                  });
+                                }
+                              });
+                            },
                             materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.grey,
                             child: const Icon(Icons.add_location, size: 36.0),
                           ),
+                          FloatingActionButton(
+                            heroTag: 'btn3',
+                            onPressed: () => _displayCurrentLocation(),
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
+                            backgroundColor: Colors.red,
+                            child: const Icon(Icons.satellite, size: 36.0),
+                          )
                         ],
                       ),
                     ),
