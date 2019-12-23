@@ -58,7 +58,7 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  _displayCurrentLocation() async {
+  Future<LatLng> _displayCurrentLocation() async {
     final location = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
@@ -117,16 +117,12 @@ class _MapScreenState extends State<MapScreen> {
                             heroTag: 'btn2',
                             //onPressed: () => _onAddMarkerButtonPressed(),
                             onPressed: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                      builder: (context) => NewPostScreen(
-                                          _displayCurrentLocation())))
-                                  .then((result) {
-                                if (result != null) {
-                                  setState(() {
-                                    //_receta.ingredientes = result;
-                                  });
-                                }
+                              _displayCurrentLocation().then((salida) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => NewPostScreen(salida),
+                                  ),
+                                );
                               });
                             },
                             materialTapTargetSize: MaterialTapTargetSize.padded,
