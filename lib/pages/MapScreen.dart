@@ -66,82 +66,124 @@ class _MapScreenState extends State<MapScreen> {
     return LatLng(location.latitude, location.longitude);
   }
 
+///Bottom Navigation Bar definición de elementos
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
+  void _onItemTapped(int index) {
+    setState(() {
+
+      ///////// Cuando tengamos las otras dos páginas, establecemos aquí las rutas
+      _selectedIndex = index;
+    });
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: StreamBuilder(
-            stream: db.collection('postit').snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-              QuerySnapshot data = snapshot.data;
-              List<DocumentSnapshot> docs = data.documents;
-              List<Postit> lista = loadData(docs);
-              for (var i = 0; i < lista.length; i++) {
-                print(lista[i].descripcion);
-              }
-              return Stack(
-                children: <Widget>[
-                  //Expanded(flex: 1, child: Container(color: Colors.green,)),
-                  GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 10.0,
-                    ),
-                    mapType: _currentMapType,
-                    markers: _markers,
-                    onCameraMove: _onCameraMove,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          FloatingActionButton(
-                            heroTag: 'btn1',
-                            onPressed: _onMapTypeButtonPressed,
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.grey,
-                            child: const Icon(Icons.map, size: 36.0),
-                          ),
-                          //height: 16.0
-                          FloatingActionButton(
-                            heroTag: 'btn2',
-                            //onPressed: () => _onAddMarkerButtonPressed(),
-                            onPressed: () {
-                              _displayCurrentLocation().then((salida) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => NewPostScreen(salida),
-                                  ),
-                                );
-                              });
-                            },
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.grey,
-                            child: const Icon(Icons.add_location, size: 36.0),
-                          ),
-                          FloatingActionButton(
-                            heroTag: 'btn3',
-                            onPressed: () => _displayCurrentLocation(),
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.red,
-                            child: const Icon(Icons.satellite, size: 36.0),
-                          )
-                        ],
+      appBar: AppBar(
+        title: Text('Maps Sample App'),
+        backgroundColor: Colors.teal[900],
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        
+        backgroundColor: Colors.teal[900],
+        iconSize: 20,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            title: Text("MAPA"),
+          ),
+          
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite,),
+            title: Text("FAVORITOS"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text("PERFIL"),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pinkAccent[400],
+        onTap: _onItemTapped,
+      ),
+      ////
+
+      body: StreamBuilder(
+        stream: db.collection('postit').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          QuerySnapshot data = snapshot.data;
+          List<DocumentSnapshot> docs = data.documents;
+          List<Postit> lista = loadData(docs);
+          for (var i = 0; i < lista.length; i++) {
+            print(lista[i].descripcion);
+          }
+          return Stack(
+            children: <Widget>[
+              //Expanded(flex: 1, child: Container(color: Colors.green,)),
+              GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 10.0,
+                ),
+                mapType: _currentMapType,
+                markers: _markers,
+                onCameraMove: _onCameraMove,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FloatingActionButton(
+                        heroTag: 'btn1',
+                        onPressed: _onMapTypeButtonPressed,
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        backgroundColor: Colors.grey,
+                        child: const Icon(Icons.map, size: 36.0),
                       ),
-                    ),
+                      //height: 16.0
+                      FloatingActionButton(
+                        heroTag: 'btn2',
+                        //onPressed: () => _onAddMarkerButtonPressed(),
+                        onPressed: () {
+                          _displayCurrentLocation().then((salida) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => NewPostScreen(salida),
+                              ),
+                            );
+                          });
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        backgroundColor: Colors.grey,
+                        child: const Icon(Icons.add_location, size: 36.0),
+                      ),
+                      FloatingActionButton(
+                        heroTag: 'btn3',
+                        onPressed: () => _displayCurrentLocation(),
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        backgroundColor: Colors.red,
+                        child: const Icon(Icons.satellite, size: 36.0),
+                      )
+                    ],
                   ),
-                ],
-              );
-            }));
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
