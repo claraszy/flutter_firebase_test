@@ -130,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
         title: Text('Maps Sample App'),
         backgroundColor: Colors.teal[900],
       ),
-
+      drawer: _drawer(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.teal[900],
         iconSize: 20,
@@ -259,4 +259,22 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
+}
+
+Widget _drawer() {
+  //TODO
+  //Pasar por parametro los TAGS que hayan en este Geohash
+  List<String> lista = ['Enano', 'Android', 'Fiesta'];
+  return Drawer(
+      elevation: 16.0,
+      child: ListView.builder(
+        itemCount: lista.length,
+        itemBuilder: (context, index) => InkWell(
+          onTap: () {},
+          child: ListTile(
+            title: Text("#" + lista[index]),
+            trailing: Icon(Icons.arrow_forward_ios),
+          ),
+        ),
+      ));
 }
