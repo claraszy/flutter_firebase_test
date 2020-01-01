@@ -28,7 +28,8 @@ dependencies:
   google_maps_flutter: ^0.4.0
   cloud_firestore: ^0.12.10  
   geolocator: ^5.1.5
-
+  geohash: any
+  location: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
