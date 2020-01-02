@@ -58,6 +58,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
      
       appBar: AppBar(
+         backgroundColor: Colors.teal[900],
+         automaticallyImplyLeading: false,
         
         title: Text(
           'ProfileScreen',

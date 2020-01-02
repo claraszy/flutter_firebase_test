@@ -32,6 +32,8 @@ class _TrendingScreenState extends State<TrendingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+         backgroundColor: Colors.teal[900],
         title: Text('Trending Screen'),
       ),
        bottomNavigationBar: BottomNavigationBar(
