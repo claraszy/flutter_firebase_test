@@ -222,7 +222,7 @@ class _TagRowState extends State<TagRow> {
                     leading: Center(
                         widthFactor: 1,
                         heightFactor: 1,
-                        child: Text('# ' + widget.tags[index].toString())),
+                        child: Text('# ' + widget.tags[index].toString(), overflow: TextOverflow.clip,)),
                     onLongPress: () {
                       setState(() {
                         widget.tags.remove(widget.tags[index]);
