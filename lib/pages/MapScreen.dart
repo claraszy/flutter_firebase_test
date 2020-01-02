@@ -105,10 +105,6 @@ class _MapScreenState extends State<MapScreen> {
 
   ///Bottom Navigation Bar definición de elementos
   int _selectedIndex = 0;
-  String my_geohash = 'Null';
-  GoogleMapController _controller_mapa;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
   void _onItemTapped(int index) {
     if (index == 1) {
       Navigator.of(context).push(
@@ -129,6 +125,11 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  String my_geohash = 'Null';
+  GoogleMapController _controller_mapa;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
+  
   Future<void> move_move() async {
     print('Almenos paso por aqui');
 
@@ -170,8 +171,6 @@ class _MapScreenState extends State<MapScreen> {
         selectedItemColor: Colors.pinkAccent[400],
         onTap: _onItemTapped,
       ),
-      ////
-
       body: StreamBuilder(
         stream: db
             .collection('postit')
