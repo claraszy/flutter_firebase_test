@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase/model/postit.dart';
+import 'package:firebase/pages/ProfileScreen.dart';
+import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:firebase/widgets/Drawer.dart';
 import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
@@ -108,6 +110,19 @@ class _MapScreenState extends State<MapScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
   void _onItemTapped(int index) {
+    if (index == 1) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => TrendingScreen(),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        ),
+      );
+    }
     setState(() {
       ///////// Cuando tengamos las otras dos páginas, establecemos aquí las rutas
       _selectedIndex = index;
@@ -261,4 +276,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
