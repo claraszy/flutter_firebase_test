@@ -147,7 +147,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
     //print(tags.text);
     DocumentReference ref = await db.collection("postit").add({
       'title': titulo.text,
-      'description': descripcion.text,
+      'descripcion': descripcion.text,
       'caducidad': DateTime.fromMicrosecondsSinceEpoch(
           DateTime.now().microsecondsSinceEpoch + 604800000000),
       'coordenadas': GeoPoint(coordenadas.latitude, coordenadas.longitude),
