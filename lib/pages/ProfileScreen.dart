@@ -78,6 +78,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
               })
         ],
       ),
+      body: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.blue,
+            border: Border.all(
+              width: 3,
+              color: Colors.white,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+        child: Column(
+          children: <Widget>[
+            Text('NOMBRE'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+              width: 20,
+              height: 20,
+            )
+          ],
+        ),
+      ),
     );
   }
 }
