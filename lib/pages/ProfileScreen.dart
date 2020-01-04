@@ -1,3 +1,4 @@
+import 'package:firebase/pages/EditProfileScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-  int _selectedIndex =2;
+  int _selectedIndex = 2;
   void _onItemTapped(int index) {
     if (index == 0) {
       Navigator.of(context).push(
@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.teal[900],
         iconSize: 20,
         items: const <BottomNavigationBarItem>[
@@ -56,12 +56,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         selectedItemColor: Colors.pinkAccent[400],
         onTap: _onItemTapped,
       ),
-     
       appBar: AppBar(
-        
         title: Text(
           'ProfileScreen',
         ),
+        backgroundColor: Colors.teal[900],
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.more_vert),
+              tooltip: 'Editar perfil',
+              highlightColor: Colors.pink[150],
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(Objeto(
+                          'Nuevo nombre',
+                          'Nuevo username',
+                          'new email',
+                          '2020',
+                          '2020',
+                        ))));
+              })
+        ],
       ),
     );
   }
