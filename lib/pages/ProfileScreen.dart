@@ -3,6 +3,33 @@ import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:flutter/material.dart';
 
+////////////////////////////////////////////////////////////////////////////////
+class _PostitProfile {
+  String title, descripcion, location;
+  int likes, dislikes;
+  _PostitProfile(
+      this.title, this.descripcion, this.location, this.likes, this.dislikes);
+}
+
+final vectorPostits = [
+  _PostitProfile('boy enano', 'gran club', 'terrassa', 300, 2),
+  _PostitProfile(
+      'zhomas mateo', 'chico parecido a Jim Carrey', 'terrassa', 1, 1),
+  _PostitProfile('title', 'descripcion', 'location', 345, 345)
+];
+
+int ContLikeTotals() {
+  int LikesTotals = 0;
+  int i;
+
+  for (i = 0; i < vectorPostits.length; i++) {
+    LikesTotals = LikesTotals + vectorPostits[i].likes;
+  }
+  return LikesTotals;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -29,6 +56,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _selectedIndex = index;
     });
   }
+
+  final BigDivider = Container(
+    height: 30,
+    color: Colors.transparent,
+  );
+  final Divider = Container(
+    height: 10,
+    color: Colors.transparent,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -80,22 +116,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.blue,
-            border: Border.all(
-              width: 3,
-              color: Colors.white,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+          shape: BoxShape.rectangle,
+          color: Colors.teal,
+        ),
         child: Column(
           children: <Widget>[
-            Text('NOMBRE'),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.red,
+            BigDivider,
+            Text(
+              'name',
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.black,
+                fontWeight: FontWeight.w900,
               ),
-              width: 20,
-              height: 20,
+            ),
+            Divider,
+            Text('@nickname',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500)),
+            BigDivider,
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0))),
+                width: 400,
+                height: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text('  Post: '),
+                          Container(
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: Text(
+                              '${vectorPostits.length}',
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Text('Likes:  '),
+                          Container(
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: Text('${ContLikeTotals().toString()}'),
+                          )
+                        ],
+                      ),
+                      Divider,
+                      Text(
+                        'what you posted',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             )
           ],
         ),
