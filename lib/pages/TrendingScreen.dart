@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/model/postit.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/ProfileScreen.dart';
+import 'package:firebase/subprogramas/utils.dart';
 import 'package:flutter/material.dart';
 
 class TrendingScreen extends StatefulWidget {
@@ -28,15 +31,19 @@ class _TrendingScreenState extends State<TrendingScreen> {
     });
   }
 
+  final db = Firestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-         backgroundColor: Colors.teal[900],
-        title: Text('Trending Screen'),
+        centerTitle: true,
+        backgroundColor: Colors.teal[900],
+        title: Text(
+          'trending now',
+        ),
       ),
-       bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.teal[900],
         iconSize: 20,
         items: const <BottomNavigationBarItem>[
@@ -59,7 +66,43 @@ class _TrendingScreenState extends State<TrendingScreen> {
         selectedItemColor: Colors.pinkAccent[400],
         onTap: _onItemTapped,
       ),
-     
+      body: StreamBuilder(
+        ////////////la condición isGreatherThan no sirve, tiene que ser que son las 10 puntuaciones más altas //////
+        stream: db
+            .collection('postit')
+            .where('valoraciones', isGreaterThan: 100)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: LinearProgressIndicator(),
+            );
+          }
+          QuerySnapshot data = snapshot.data;
+          List<DocumentSnapshot> docs = data.documents;
+
+          /// List<Postit> lista= loadData(docs);
+
+          return Scrollbar(
+            child: ListView.builder(
+              itemCount: docs.length,
+              reverse: true,
+              itemBuilder: (context, index) {
+                var postvaloration =
+                    docs[index].data['valoraciones'].toString();
+                for (var pos = 2; pos < docs.length; pos++) {
+                  return ListTile(
+                    leading: Container(child: Text(pos.toString()), width: 10,),
+                    ///////////////// contenido del ListTile /////////////
+                    title: Text(postvaloration),
+                    
+                  );
+                }
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
