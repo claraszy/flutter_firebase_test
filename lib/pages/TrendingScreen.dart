@@ -12,6 +12,7 @@ class TrendingScreen extends StatefulWidget {
 
 class _TrendingScreenState extends State<TrendingScreen> {
   int _selectedIndex = 1;
+
   void _onItemTapped(int index) {
     if (index == 0) {
       Navigator.of(context).push(
@@ -88,16 +89,16 @@ class _TrendingScreenState extends State<TrendingScreen> {
               itemCount: docs.length,
               reverse: true,
               itemBuilder: (context, index) {
-                var postvaloration =
-                    docs[index].data['valoraciones'].toString();
-                for (var pos = 2; pos < docs.length; pos++) {
-                  return ListTile(
-                    leading: Container(child: Text(pos.toString()), width: 10,),
-                    ///////////////// contenido del ListTile /////////////
-                    title: Text(postvaloration),
-                    
-                  );
-                }
+                var postTags = docs[index].data['tags'].toString();
+                 String etiq = postTags[0];
+
+                return ListTile(
+                  leading: Container(
+                    child: Text((docs.length - index).toString()),
+                    width: 10,
+                  ),
+                  title: Text(etiq),
+                );
               },
             ),
           );
