@@ -69,7 +69,11 @@ class _TrendingScreenState extends State<TrendingScreen> {
       ),
       body: StreamBuilder(
         ////////////el stream coge toda la colección de postit, sin ninguna condición, para tratarlos todos //////
-        stream: db.collection('postit').orderBy('valoraciones').snapshots(),
+        stream: db
+            .collection('postit')
+            .orderBy('valoraciones', descending: true)
+            .limit(10)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -81,25 +85,27 @@ class _TrendingScreenState extends State<TrendingScreen> {
 
           /// List<Postit> lista= loadData(docs);
 
-          return Scrollbar(
-            child: ListView.builder(
-              itemCount: docs.length,
-              reverse: true,
-              itemBuilder: (context, index) {
-                var postTags = docs[index].data['descripcion'];
-                var postValoracion = docs[index].data['valoraciones'];
-                String etiq = postTags[0];
-                print(postTags);
+          return ListView.builder(
+            itemCount: docs.length,
+            reverse: false,
+            itemBuilder: (context, index) {
+              var post = data.documents[index];
+              var postitTag = post.data;
+              var tagdePost = snapshot.data.documents[index].data['tags'];
+              List<String> listaTagsPost = post.data['tags'];
+              var valoracionPost = post.data['valoraciones'];
+              var descripcionPost = post.data['descripcion'];
 
-                return ListTile(
+              /// var postTags = docs[index].data['descripcion'];
+              ///var postValoracion = docs[index].data['valoraciones'];
+              return ListTile(
                   leading: Container(
-                    child: Text((docs.length - index).toString()),
-                    width: 10,
+                    child: Text((index + 1).toString()),
                   ),
-                  title: Text(postTags + '. VALORACIÓN ' + postValoracion.toString()),
-                );
-              },
-            ),
+                  title: Text(descripcionPost +
+                      '. VALORACIÓN DE ' +
+                      valoracionPost.toString()));
+            },
           );
         },
       ),
