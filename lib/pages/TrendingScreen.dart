@@ -68,11 +68,8 @@ class _TrendingScreenState extends State<TrendingScreen> {
         onTap: _onItemTapped,
       ),
       body: StreamBuilder(
-        ////////////la condición isGreatherThan no sirve, tiene que ser que son las 10 puntuaciones más altas //////
-        stream: db
-            .collection('postit')
-            .where('valoraciones', isGreaterThan: 100)
-            .snapshots(),
+        ////////////el stream coge toda la colección de postit, sin ninguna condición, para tratarlos todos //////
+        stream: db.collection('postit').orderBy('valoraciones').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -89,15 +86,17 @@ class _TrendingScreenState extends State<TrendingScreen> {
               itemCount: docs.length,
               reverse: true,
               itemBuilder: (context, index) {
-                var postTags = docs[index].data['tags'].toString();
-                 String etiq = postTags[0];
+                var postTags = docs[index].data['descripcion'];
+                var postValoracion = docs[index].data['valoraciones'];
+                String etiq = postTags[0];
+                print(postTags);
 
                 return ListTile(
                   leading: Container(
                     child: Text((docs.length - index).toString()),
                     width: 10,
                   ),
-                  title: Text(etiq),
+                  title: Text(postTags + '. VALORACIÓN ' + postValoracion.toString()),
                 );
               },
             ),
