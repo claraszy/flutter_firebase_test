@@ -68,11 +68,11 @@ class _TrendingScreenState extends State<TrendingScreen> {
         onTap: _onItemTapped,
       ),
       body: StreamBuilder(
-        ////////////el stream coge toda la colección de postit, sin ninguna condición, para tratarlos todos //////
+        ////////////el stream coge los 100 primeros postit con valoracion más alta, para asegurarnos de tener 10 tags distintos //////
         stream: db
             .collection('postit')
             .orderBy('valoraciones', descending: true)
-            .limit(10)
+            .limit(100)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -86,25 +86,30 @@ class _TrendingScreenState extends State<TrendingScreen> {
           /// List<Postit> lista= loadData(docs);
 
           return ListView.builder(
-            itemCount: docs.length,
+            itemCount: 10,
             reverse: false,
             itemBuilder: (context, index) {
               var post = data.documents[index];
-              var postitTag = post.data;
-              var tagdePost = snapshot.data.documents[index].data['tags'];
-              List<String> listaTagsPost = post.data['tags'];
+              List listaTagsPost = post.data['tags'];
+              List <String> etiquetas=[];
               var valoracionPost = post.data['valoraciones'];
               var descripcionPost = post.data['descripcion'];
-
-              /// var postTags = docs[index].data['descripcion'];
-              ///var postValoracion = docs[index].data['valoraciones'];
-              return ListTile(
+              for (var item in listaTagsPost) {
+                etiquetas.add(item);
+              }
+              for (var i = 0; i < etiquetas.length; i++) {
+                var trendingTags = etiquetas[i];
+                print(etiquetas[i]);
+              }
+                /// var postTags = docs[index].data['descripcion'];
+                ///var postValoracion = docs[index].data['valoraciones'];
+               return ListTile(
                   leading: Container(
                     child: Text((index + 1).toString()),
                   ),
-                  title: Text(descripcionPost +
-                      '. VALORACIÓN DE ' +
-                      valoracionPost.toString()));
+                  title: Text('HOLA'),
+                  // descripcionPost + '. VALORACIÓN DE ' +  valoracionPost.toString()
+                );
             },
           );
         },
