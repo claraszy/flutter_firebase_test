@@ -15,14 +15,12 @@ class NewPostScreen extends StatefulWidget {
 }
 
 class _NewPostScreenState extends State<NewPostScreen> {
-  //TextEditingController _controller;
   List<TextEditingController> _controller;
   List<String> tags = [];
   String etiqueta;
   LatLng posicion;
   _NewPostScreenState(this.posicion);
   void initState() {
-    //_controller = TextEditingController();
     _controller = [
       for (int i = 0; i < 3; i++) TextEditingController(),
     ];
@@ -30,91 +28,170 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   void dispose() {
-    //_controller.dispose();
     for (int i = 0; i < 3; i++) _controller[i].dispose();
-
     super.dispose();
   }
 
   final db = Firestore.instance;
+  final focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('New Post It'),
-        backgroundColor: Colors.green[700],
-      ),
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.greenAccent[100],
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 20.0),
-            child: Container(
-              child: Text('Title'),
+          Expanded(
+            flex: 8,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "new",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    "post'it",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 8),
+                    child: Text(
+                      'Title',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  TextField(
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    controller: _controller[0],
+                    onSubmitted: (what) {
+                      FocusScope.of(context).requestFocus(focus);
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 8),
+                    child: Text(
+                      'Description',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      focusNode: focus,
+                      textAlignVertical: TextAlignVertical.top,
+                      maxLines: null,
+                      minLines: null,
+                      expands: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      controller: _controller[1],
+                      onSubmitted: (what) {},
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 8),
+                    child: Text(
+                      '#tags',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    controller: _controller[2],
+                    onSubmitted: (what) {
+                      etiqueta = _controller[2].text.toString();
+                      setState(() {
+                        tags.add(etiqueta);
+                      });
+                      printTag(tags);
+                      _controller[2].clear();
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    child: TagRow(tags: tags),
+                  ),
+                ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              controller: _controller[0],
-              onSubmitted: (what) {
-                //TODO
-              },
-              //keyboardType: TextInputType.number
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 20.0),
-            child: Container(child: Text('Description')),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: _controller[1],
-              onSubmitted: (what) {
-                //TODO
-              },
-              //keyboardType: TextInputType.number
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 20.0),
-            child: Container(child: Text('Tags')),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              controller: _controller[2],
-              onSubmitted: (what) {
-                etiqueta = _controller[2].text.toString();
-                setState(() {
-                  tags.add(etiqueta);
-                });
-                printTag(tags);
-                _controller[2].clear();
-                //TODO
-              },
-              //keyboardType: TextInputType.number
-            ),
-          ),
-          TagRow(tags: tags),
           /*Container(
                                 child: Text(this.posicion.toString()),
                                  )*/
-          Expanded(flex: 5, child: Container()),
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
               height: 50,
-              color: Colors.grey,
+              color: Colors.teal[400],
               child: Row(
                 children: <Widget>[
-                  Spacer(),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.only(left: 60.0, right: 50),
                     child: IconButton(
-                      icon: Icon(Icons.publish),
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.grey[700],
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 8.0,
+                        left: 19.0,
+                        right: 19.0,
+                      ),
+                      child: Container(
+                        width: 1,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 60.0, left: 55),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.purple,
+                        size: 35,
+                      ),
                       onPressed: () {
                         createPostit(
                                 posicion, _controller[0], _controller[1], tags)
@@ -152,8 +229,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
           DateTime.now().microsecondsSinceEpoch + 604800000000),
       'coordenadas': GeoPoint(coordenadas.latitude, coordenadas.longitude),
       //GeoPoint(41.564191, 2.017206),
-      'geohash':Geohash.encode(coordenadas.latitude, coordenadas.longitude).substring(0, 7),
+      'geohash': Geohash.encode(coordenadas.latitude, coordenadas.longitude)
+          .substring(0, 7),
       'valoraciones': 0,
+      'tag': tags,
     });
 
     print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
@@ -162,15 +241,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
     print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
     print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
     print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-
-    for (var i = 0; i < tags.length; i++) {
-      print('Sube tags!!');
-      await db
-          .collection("postit")
-          .document(ref.documentID)
-          .collection("tags")
-          .add({'tag': tags[i]});
-    }
     return ref.documentID;
   }
 }
@@ -209,6 +279,7 @@ class _TagRowState extends State<TagRow> {
               padding: const EdgeInsets.all(1.0),
               child: Container(
                 decoration: ShapeDecoration(
+                  color: Colors.white,
                   shape: StadiumBorder(
                     side: BorderSide(
                       color: Colors.grey[400],
@@ -222,7 +293,10 @@ class _TagRowState extends State<TagRow> {
                     leading: Center(
                         widthFactor: 1,
                         heightFactor: 1,
-                        child: Text('# ' + widget.tags[index].toString(), overflow: TextOverflow.clip,)),
+                        child: Text(
+                          '# ' + widget.tags[index].toString(),
+                          overflow: TextOverflow.clip,
+                        )),
                     onLongPress: () {
                       setState(() {
                         widget.tags.remove(widget.tags[index]);
