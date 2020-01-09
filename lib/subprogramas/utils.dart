@@ -16,7 +16,8 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
         docs[i].data['valoraciones'],
         docs[i].data['caducidad'],
         docs[i].data['geohash'],
-        tags
+        tags,
+        docs[i].data['oculto']
         ));
   }
   return post;

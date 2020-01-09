@@ -2,6 +2,7 @@ import 'package:firebase/pages/EditProfileScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 ////////////////////////////////////////////////////////////////////////////////
 class _PostitProfile {
@@ -15,7 +16,12 @@ final vectorPostits = [
   _PostitProfile('boy enano', 'gran club', 'terrassa', 300, 2),
   _PostitProfile(
       'zhomas mateo', 'chico parecido a Jim Carrey', 'terrassa', 1, 1),
-  _PostitProfile('title', 'descripcion', 'location', 345, 345)
+  _PostitProfile('title', 'descripcion', 'location', 345, 345),
+  _PostitProfile('title', 'descripcion', 'location', 3, 8),
+  _PostitProfile('title', 'descripcion', 'location', 3, 8),
+  _PostitProfile('title', 'descripcion', 'location', 3, 8),
+  _PostitProfile('title', 'descripcion', 'location', 3, 8),
+  _PostitProfile('title', 'descripcion', 'location', 3, 8)
 ];
 
 int ContLikeTotals() {
@@ -117,102 +123,180 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: <Widget>[
-          SizedBox(
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.teal,
-              ),
-              child: Column(
-                children: <Widget>[
-                  BigDivider,
-                  Text(
-                    'name',
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  Divider,
-                  Text('@nickname',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                  BigDivider,
-                  BigDivider,
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12.0),
-                              topRight: Radius.circular(12.0))),
-                      width: 400,
-                      height: 300,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text('  Post: '),
-                                Container(
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                  ),
-                                  child: Text(
-                                    '${vectorPostits.length}',
-                                  ),
-                                ),
-                                Expanded(child: Container()),
-                                Text('Likes:  '),
-                                Container(
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                  ),
-                                  child: Text('${ContLikeTotals().toString()}'),
-                                )
-                              ],
-                            ),
-                            Divider,
-                            Text(
-                              'what you posted',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            child: Padding(
-              padding: const EdgeInsets.only(top:100.0),
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ),
+          Container(color: Colors.white, child: Lista_postits()),
+          GranContainer(BigDivider: BigDivider, Divider: Divider),
+          FotoPerfil(),
         ],
       ),
+    );
+  }
+}
+
+class GranContainer extends StatelessWidget {
+  const GranContainer({
+    Key key,
+    @required this.BigDivider,
+    @required this.Divider,
+  }) : super(key: key);
+
+  final Container BigDivider;
+  final Container Divider;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.teal,
+        ),
+        height: 225,
+        child: Column(
+          children: <Widget>[
+            BigDivider,
+            Text(
+              'name',
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.black,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            Divider,
+            Text('@nickname',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500)),
+            BigDivider,
+            BigDivider,
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0))),
+                width: 400,
+                height: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text('  Post: '),
+                          Container(
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: Text(
+                              '${vectorPostits.length}',
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Text('Likes:  '),
+                          Container(
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: Text('${ContLikeTotals().toString()}'),
+                          )
+                        ],
+                      ),
+                      Divider,
+                      Text(
+                        'what you posted',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FotoPerfil extends StatelessWidget {
+  const FotoPerfil({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 100.0),
+        child: Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Cards extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Lista_postits(),
+    );
+  }
+}
+
+class Lista_postits extends StatelessWidget {
+  const Lista_postits({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      child: ListView.builder(
+          padding: const EdgeInsets.only(top: 215),
+          itemCount: vectorPostits.length,
+          itemBuilder: (context, index) => InkWell(
+                onTap: () {},
+                child: Card(
+                  child: ListTile(
+                    title: Text(
+                      vectorPostits[index].title,
+                    ),
+                    subtitle: Row(
+                      children: <Widget>[
+                        Text(vectorPostits[index].descripcion),
+                        Expanded(child: Container()),
+                        Icon(
+                          Icons.thumb_up,
+                          color: Colors.green,
+                        ),
+                        Text(vectorPostits[index].likes.toString()),
+                        prefix0.Container(width: 3),
+                        Icon(Icons.thumb_down, color: Colors.red),
+                        prefix0.Container(width: 1),
+                        Text(vectorPostits[index].dislikes.toString()),
+                      ],
+                    ),
+                  ),
+                ),
+              )),
     );
   }
 }
