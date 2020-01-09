@@ -50,13 +50,27 @@ class _NewPostScreenState extends State<NewPostScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "new",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  Text(
-                    "post'it",
-                    style: TextStyle(fontSize: 30),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 100,
+                        child: Text(
+                          "new post it",
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        child: FlatButton(
+                          child: Icon(Icons.thumbs_up_down, color: Colors.grey[300],  ),
+                          onPressed: (){
+                            setState(() {
+                              
+                            });
+                          },
+                        ),
+                      )
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 8),
@@ -235,12 +249,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
       'tag': tags,
     });
 
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
-    print('¡¡¡¡¡¡¡¡!!!!!!!!!!!!!!');
     return ref.documentID;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase/model/postit.dart';
 import 'package:firebase/pages/MapScreen.dart';
+import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TrendingScreen(),
+      home: MapScreen(),
     );
   }
 }
