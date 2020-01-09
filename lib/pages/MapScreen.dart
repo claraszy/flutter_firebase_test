@@ -43,26 +43,29 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
     );
-    print('LLego al init');
+    //print('LLego al init');
   }
 
   void _onAddMarkerButtonPressed(lista_entrada, lista_anterior) {
-    print('Adding marks');
+    //print('Adding marks');
     if (lista_entrada != lista_anterior) {
       setState(() {
         for (var i = 0; i < lista_entrada.length; i++) {
+          String descripcion = lista_entrada[i].descripcion;
+          String titulo = lista_entrada[i].titulo;
+          var valoracion = lista_entrada[i].valoraciones;
+          List<String> tags = ["tags"];
           _markers.add(Marker(
-            // This marker id can be anything that uniquely identifies each marker.
-            //TODO
-            //Cambiar identificador, para que sea único.
-            markerId: MarkerId(lista_entrada[i].posicion.toString()),
-            position: lista_entrada[i].posicion,
-            infoWindow: InfoWindow(
-              title: lista_entrada[i].descripcion,
-              snippet: lista_entrada[i].valoraciones.toString(),
-            ),
-            icon: BitmapDescriptor.defaultMarker,
-          ));
+              // This marker id can be anything that uniquely identifies each marker.
+              //TODO
+              //Cambiar identificador, para que sea único.
+              markerId: MarkerId(lista_entrada[i].posicion.toString()),
+              position: lista_entrada[i].posicion,
+              icon: BitmapDescriptor.defaultMarker,
+              onTap: () {
+                showFancyCustomDialog(
+                    context, titulo, descripcion, valoracion, tags);
+              }));
         }
         lista_entrada = lista_anterior;
       });
@@ -70,9 +73,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _onCameraMove(CameraPosition position) {
-    if (_lastMapPosition != position.target) {
+    /*if (_lastMapPosition != position.target) {
       print('Se mueve!');
-    }
+    } */
     _lastMapPosition = position.target;
 
     //print(position.target);
@@ -129,10 +132,8 @@ class _MapScreenState extends State<MapScreen> {
   GoogleMapController _controller_mapa;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
-  
-  Future<void> move_move() async {
-    print('Almenos paso por aqui');
 
+  Future<void> move_move() async {
     double lat = _center.latitude;
     double long = _center.longitude;
     GoogleMapController controller = await _controller.future;
@@ -177,7 +178,7 @@ class _MapScreenState extends State<MapScreen> {
             .where('geohash', isEqualTo: my_geohash)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          print('Inicio');
+          //print('Inicio');
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -185,10 +186,10 @@ class _MapScreenState extends State<MapScreen> {
           QuerySnapshot data = snapshot.data;
           List<DocumentSnapshot> docs = data.documents;
           List<Postit> lista = loadData(docs);
-          print('---------------------');
+          //print('---------------------');
 
-          print('---------------------');
-          print('Fine');
+          //print('---------------------');
+          //print('Fine');
           _displayCurrentLocation().then((salida) {
             setState(() {
               my_geohash = Geohash.encode(salida.latitude, salida.longitude)
@@ -200,9 +201,9 @@ class _MapScreenState extends State<MapScreen> {
             //print('Hola');
           });
           move_move();
-          print("Centrooo");
-          print(_center);
-          print(my_geohash);
+          //print("Centrooo");
+          //print(_center);
+          //print(my_geohash);
           return Stack(
             children: <Widget>[
               //Expanded(flex: 1, child: Container(color: Colors.green,)),
@@ -274,4 +275,202 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
+}
+
+void showFancyCustomDialog(
+    BuildContext context, titulo, descripcion, valoracion, tags) {
+  //List<String> tags = ['300', '111', '222', '3333', '444'];
+  Dialog fancyDialog = Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      height: 300.0,
+      width: 300.0,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: 300,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+          Container(
+            //width: double.infinity,
+            height: 50,
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+              color: Colors.teal[900],
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                titulo,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0, left: 8, right: 8),
+            child: Container(
+              height: 150,
+              child: ListView(children: <Widget>[
+                Center(
+                    child: Text('Descripcion',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ))),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Container(
+                    child: Text(descripcion),
+                  ),
+                ),
+              ]),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 200.0),
+            child: Container(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: tags.length,
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: Container(
+                      decoration: ShapeDecoration(
+                        color: Colors.grey[100],
+                        shape: StadiumBorder(
+                          side: BorderSide(
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                      width: 150,
+                      height: 5,
+                      child: Center(
+                        child: ListTile(
+                          leading: Center(
+                              widthFactor: 1,
+                              heightFactor: 1,
+                              child: Text(
+                                '# ' + tags[index].toString(),
+                                overflow: TextOverflow.clip,
+                              )),
+
+                          //title: Text('#${tags[index]}', style: TextStyle(fontSize: 12),),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "-",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  //color: Colors.grey,
+                  child: Text(valoracion.toString()),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 8.0,
+                    bottom: 8.0,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "+",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment(1.05, -1.05),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+  showDialog(context: context, builder: (BuildContext context) => fancyDialog);
 }
