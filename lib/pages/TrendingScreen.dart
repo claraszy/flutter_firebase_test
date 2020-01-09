@@ -15,7 +15,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      Navigator.of(context).pop(
+      Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => MapScreen(),
         ),
@@ -82,9 +82,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
           }
           QuerySnapshot data = snapshot.data;
           List<DocumentSnapshot> docs = data.documents;
-          print('hola');
           List<Postit> listaDePostits = loadData(docs);
-          print('adios');
           return ListView.builder(
             itemCount: 10,
             reverse: false,
@@ -107,7 +105,11 @@ class _TrendingScreenState extends State<TrendingScreen> {
               }
               return ListTile(
                 leading: Container(
-                  child: Text((index + 1).toString()),
+                  child: Column(
+                    children: <Widget>[
+                      Text((index + 1).toString()),
+                    ],
+                  ),
                 ),
                 title: Text(trendingTags[index]),
               );
