@@ -15,7 +15,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      Navigator.of(context).push(
+      Navigator.of(context).pop(
         MaterialPageRoute(
           builder: (context) => MapScreen(),
         ),
@@ -82,34 +82,35 @@ class _TrendingScreenState extends State<TrendingScreen> {
           }
           QuerySnapshot data = snapshot.data;
           List<DocumentSnapshot> docs = data.documents;
-
-          /// List<Postit> lista= loadData(docs);
-
+          print('hola');
+          List<Postit> listaDePostits = loadData(docs);
+          print('adios');
           return ListView.builder(
             itemCount: 10,
             reverse: false,
             itemBuilder: (context, index) {
-              var post = data.documents[index];
-              List listaTagsPost = post.data['tags'];
-              List <String> etiquetas=[];
-              var valoracionPost = post.data['valoraciones'];
-              var descripcionPost = post.data['descripcion'];
-              for (var item in listaTagsPost) {
-                etiquetas.add(item);
+              List<String> trendingTags = [];
+              for (var i = 0; i < listaDePostits.length; i++) {
+                for (var a = 0; a < listaDePostits[i].tags.length; a++) {
+                  if (!trendingTags.contains(listaDePostits[i].tags[a])) {
+                    trendingTags.add(listaDePostits[i].tags[a]);
+                  }
+                  if (trendingTags.length >= 10) {
+                    return ListTile(
+                      leading: Container(
+                        child: Text((index + 1).toString()),
+                      ),
+                      title: Text(trendingTags[index]),
+                    );
+                  }
+                }
               }
-              for (var i = 0; i < etiquetas.length; i++) {
-                var trendingTags = etiquetas[i];
-                print(etiquetas[i]);
-              }
-                /// var postTags = docs[index].data['descripcion'];
-                ///var postValoracion = docs[index].data['valoraciones'];
-               return ListTile(
-                  leading: Container(
-                    child: Text((index + 1).toString()),
-                  ),
-                  title: Text('HOLA'),
-                  // descripcionPost + '. VALORACIÓN DE ' +  valoracionPost.toString()
-                );
+              return ListTile(
+                leading: Container(
+                  child: Text((index + 1).toString()),
+                ),
+                title: Text(trendingTags[index]),
+              );
             },
           );
         },
