@@ -19,6 +19,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   List<String> tags = [];
   String etiqueta;
   LatLng posicion;
+  bool ocult = true;
   _NewPostScreenState(this.posicion);
   void initState() {
     _controller = [
@@ -34,6 +35,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   final db = Firestore.instance;
   final focus = FocusNode();
+  
+ // bool estatOcult = ocult;
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +65,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       Spacer(),
                       Container(
                         child: FlatButton(
-                          child: Icon(Icons.thumbs_up_down, color: Colors.grey[300],  ),
-                          onPressed: (){
+                          child: Icon(
+                            Icons.thumbs_up_down,
+                            color: (ocult ? Colors.grey[400] : Colors.teal),
+                          ),
+                          
+                          onLongPress: () {
                             setState(() {
-                              
+                              ocult = !ocult;
                             });
                           },
                         ),
@@ -246,7 +253,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
       'geohash': Geohash.encode(coordenadas.latitude, coordenadas.longitude)
           .substring(0, 7),
       'valoraciones': 0,
-      'tag': tags,
+      'tags': tags,
     });
 
     return ref.documentID;
