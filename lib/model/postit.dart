@@ -9,9 +9,10 @@ class Postit {
   Timestamp _caducidad;
   String _geohash;
   List <String> _tags;
+  bool _oculto;
 
   Postit(this._titulo, this._posicion, this._descripcion, this._valoraciones,
-      this._caducidad, this._geohash, this._tags);
+      this._caducidad, this._geohash, this._tags, this._oculto);
 
   get posicion => LatLng(_posicion.latitude, _posicion.longitude);
   get valoraciones => _valoraciones;
@@ -20,4 +21,5 @@ class Postit {
   get caducidad => _caducidad;
   get geohash => _geohash;
   get tags => _tags;
+  get oculto => _oculto;
 }
