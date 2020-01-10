@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/pages/EditProfileScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
@@ -72,6 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     color: Colors.transparent,
   );
 
+  final userdata = Firestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,13 +122,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               })
         ],
       ),
-      body: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: <Widget>[
-          Container(color: Colors.white, child: Lista_postits()),
-          GranContainer(BigDivider: BigDivider, Divider: Divider),
-          FotoPerfil(),
-        ],
+      body: StreamBuilder(
+        stream: userdata.collection('users').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapd) {
+          if (!snapd.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+           
+          return Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: <Widget>[
+              Container(color: Colors.white, child: Lista_postits()),
+              GranContainer(BigDivider: BigDivider, Divider: Divider),
+              FotoPerfil(),
+            ],
+          );
+        },
       ),
     );
   }
