@@ -96,22 +96,32 @@ class _TrendingScreenState extends State<TrendingScreen> {
                   if (trendingTags.length >= 10) {
                     return ListTile(
                       leading: Container(
-                        child: Text((index + 1).toString()),
+                        child: Text(
+                          (index + 1).toString(),
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
-                      title: Text(trendingTags[index]),
+                      title: Text(
+                        trendingTags[index],
+                        style: TextStyle(fontSize: 12),
+                      ),
                     );
                   }
                 }
               }
-              return ListTile(
-                leading: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Text((index + 1).toString()),
-                    ],
+              return Card(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text((index + 1).toString()),
+                        Text(trendingTags[index])
+                      ],
+                    ),
+                    // leading: Container(child: Column( children: <Widget>[  Text((index + 1).toString()),  ],  ), ), title: Text(trendingTags[index]),
                   ),
                 ),
-                title: Text(trendingTags[index]),
               );
             },
           );
