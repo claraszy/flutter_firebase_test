@@ -83,44 +83,31 @@ class _TrendingScreenState extends State<TrendingScreen> {
           QuerySnapshot data = snapshot.data;
           List<DocumentSnapshot> docs = data.documents;
           List<Postit> listaDePostits = loadData(docs);
+          List<String> trendingTags = [];
+          for (var i = 0; i < listaDePostits.length; i++) {
+            for (var a = 0; a < listaDePostits[i].tags.length; a++) {
+              if (!trendingTags.contains(listaDePostits[i].tags[a])) {
+                trendingTags.add(listaDePostits[i].tags[a]);
+              }
+              if (trendingTags.length >= 10) {
+                break;
+              }
+            }
+          }
           return ListView.builder(
-            itemCount: 10,
+            itemCount: trendingTags.length,
             reverse: false,
             itemBuilder: (context, index) {
-              List<String> trendingTags = [];
-              for (var i = 0; i < listaDePostits.length; i++) {
-                for (var a = 0; a < listaDePostits[i].tags.length; a++) {
-                  if (!trendingTags.contains(listaDePostits[i].tags[a])) {
-                    trendingTags.add(listaDePostits[i].tags[a]);
-                  }
-                  if (trendingTags.length >= 10) {
-                    return ListTile(
-                      leading: Container(
-                        child: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      title: Text(
-                        trendingTags[index],
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    );
-                  }
-                }
-              }
-              return Card(
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Text((index + 1).toString()),
-                        Text(trendingTags[index])
-                      ],
-                    ),
-                    // leading: Container(child: Column( children: <Widget>[  Text((index + 1).toString()),  ],  ), ), title: Text(trendingTags[index]),
+              return ListTile(
+                leading: Container(
+                  child: Text(
+                    (index + 1).toString(),
+                    style: TextStyle(fontSize: 12),
                   ),
+                ),
+                title: Text(
+                  trendingTags[index],
+                  style: TextStyle(fontSize: 12),
                 ),
               );
             },
