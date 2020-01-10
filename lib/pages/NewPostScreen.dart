@@ -254,6 +254,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
           .substring(0, 7),
       'valoraciones': 0,
       'tags': tags,
+      'ocult': ocult,
     });
 
     return ref.documentID;
