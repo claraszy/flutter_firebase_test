@@ -1,11 +1,10 @@
 
-
 class Perfil {
-  String alias, email, foto, nombre;
-  int nPublicaciones, nValoraciones;
-  List pGustados, pVigentes;
+  String _alias, _email, _foto, _nombre;
+  int _nPublicaciones, _nValoraciones;
+  List _pGustados, _pVigentes;
 
-  Perfil(this.alias, this.email, this.foto, this.nombre, this.nPublicaciones, this.nValoraciones, this.pGustados, this.pVigentes);
+  Perfil(this._alias, this._email, this._foto, this._nombre, this._nPublicaciones, this._nValoraciones, this._pGustados, this._pVigentes);
  
   get alias => _alias;
   get email => _email;
