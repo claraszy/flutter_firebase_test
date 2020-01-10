@@ -28,6 +28,8 @@ class _MapScreenState extends State<MapScreen> {
 
   MapType _currentMapType = MapType.normal;
 
+  bool visible = false;
+
   final db = Firestore.instance;
   final lista2 = [];
   GoogleMapController mapController;
@@ -46,28 +48,75 @@ class _MapScreenState extends State<MapScreen> {
     //print('LLego al init');
   }
 
-  void _onAddMarkerButtonPressed(lista_entrada, lista_anterior) {
+  void _refresh(
+      lista_actual, lista_anterior, geohash_actual, geohash_anterior, visible) {
+    print('Hola');
+    if (visible &&
+        geohash_actual != geohash_anterior &&
+        lista_actual != lista_anterior) {
+      setState(() {
+        _markers.clear();
+      });
+      for (var i = 0; i < lista_actual.length; i++) {
+        String descripcion = lista_actual[i].descripcion;
+        //print(descripcion);
+        String titulo = lista_actual[i].titulo;
+        //print(titulo);
+        var valoracion = lista_actual[i].valoraciones;
+        //print(valoracion);
+        List<String> tags = ["tags"];
+
+        _markers.add(Marker(
+            // This marker id can be anything that uniquely identifies each marker.
+            //TODO
+            //Cambiar identificador, para que sea único.
+            markerId: MarkerId(i.toString()),
+            position: lista_actual[i].posicion,
+            icon: BitmapDescriptor.defaultMarker,
+            onTap: () {
+              print('Tap');
+              showFancyCustomDialog(
+                  context, titulo, descripcion, valoracion, tags);
+            }));
+      }
+
+      lista_anterior = geohash_actual;
+      geohash_anterior = lista_actual;
+    }
+  }
+
+  void _onAddMarkerButtonPressed(lista_entrada, lista2, visible) {
     //print('Adding marks');
-    if (lista_entrada != lista_anterior) {
+    if (visible) {
       setState(() {
         for (var i = 0; i < lista_entrada.length; i++) {
           String descripcion = lista_entrada[i].descripcion;
+          //print(descripcion);
           String titulo = lista_entrada[i].titulo;
+          //print(titulo);
           var valoracion = lista_entrada[i].valoraciones;
+          //print(valoracion);
           List<String> tags = ["tags"];
+
           _markers.add(Marker(
               // This marker id can be anything that uniquely identifies each marker.
               //TODO
               //Cambiar identificador, para que sea único.
-              markerId: MarkerId(lista_entrada[i].posicion.toString()),
+              markerId: MarkerId(i.toString()),
               position: lista_entrada[i].posicion,
               icon: BitmapDescriptor.defaultMarker,
               onTap: () {
+                print('Tap');
                 showFancyCustomDialog(
                     context, titulo, descripcion, valoracion, tags);
               }));
         }
-        lista_entrada = lista_anterior;
+
+        lista2 = lista_entrada;
+      });
+    } else {
+      setState(() {
+        _markers.clear();
       });
     }
   }
@@ -129,6 +178,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   String my_geohash = 'Null';
+  String my_geohash_anterior = 'Null';
   GoogleMapController _controller_mapa;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey);
@@ -138,7 +188,7 @@ class _MapScreenState extends State<MapScreen> {
     double long = _center.longitude;
     GoogleMapController controller = await _controller.future;
     controller
-        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), 20.0));
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), 17.7));
   }
 
   @override
@@ -194,12 +244,16 @@ class _MapScreenState extends State<MapScreen> {
             setState(() {
               my_geohash = Geohash.encode(salida.latitude, salida.longitude)
                   .substring(0, 7);
+              print(my_geohash);
               _center = salida;
+              //geohash_actual, geohash_anterior
+              _refresh(lista, lista2, my_geohash, my_geohash_anterior, visible);
             });
             //print('Geohash');
             // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
             //print('Hola');
           });
+
           move_move();
           //print("Centrooo");
           //print(_center);
@@ -211,7 +265,7 @@ class _MapScreenState extends State<MapScreen> {
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: _center,
-                  zoom: 20.0,
+                  zoom: 17.7,
                 ),
                 mapType: _currentMapType,
                 markers: _markers,
@@ -259,8 +313,13 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                       FloatingActionButton(
                         heroTag: 'btn3',
-                        onPressed: () =>
-                            _onAddMarkerButtonPressed(lista, lista2),
+                        onPressed: () {
+                          //visible
+                          setState(() {
+                            visible = !visible;
+                          });
+                          _onAddMarkerButtonPressed(lista, lista2, visible);
+                        },
                         materialTapTargetSize: MaterialTapTargetSize.padded,
                         backgroundColor: Colors.red,
                         child: const Icon(Icons.satellite, size: 36.0),
