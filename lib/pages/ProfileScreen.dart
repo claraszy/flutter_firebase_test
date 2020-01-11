@@ -123,6 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTap: _onItemTapped,
       ),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
           'ProfileScreen',
         ),
@@ -152,7 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircularProgressIndicator(),
             );
           }
-
+          print('userIdProfile');
+          print(this.userId);
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: <Widget>[
