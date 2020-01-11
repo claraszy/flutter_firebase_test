@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase/model/postit.dart';
 import 'package:firebase/pages/ProfileScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
+import 'package:firebase/services/authentification.dart';
 import 'package:firebase/widgets/Drawer.dart';
 import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
@@ -13,18 +14,30 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geohash/geohash.dart';
 
 class MapScreen extends StatefulWidget {
+  MapScreen(this.location, final String userId,
+      {Key key, this.auth, this.logoutCallback})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  String userId;
+  LatLng location;
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _MapScreenState createState() => _MapScreenState(this.location, this.userId);
 }
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
 
-  LatLng _center = LatLng(41.5640083, 2.0224067000000048);
+  _MapScreenState(this._center, this.userIdMV);
 
+  LatLng _center;
+
+  String userIdMV;
+  String user_id = '';
   final Set<Marker> _markers = {};
 
-  LatLng _lastMapPosition = LatLng(41.5640083, 2.0224067000000048);
+  //LatLng _lastMapPosition = LatLng(41.5640083, 2.0224067000000048);
 
   MapType _currentMapType = MapType.normal;
 
@@ -50,7 +63,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _refresh(
       lista_actual, lista_anterior, geohash_actual, geohash_anterior, visible) {
-    print('Hola');
+    //print('Hola');
     if (visible &&
         geohash_actual != geohash_anterior &&
         lista_actual != lista_anterior) {
@@ -125,7 +138,8 @@ class _MapScreenState extends State<MapScreen> {
     /*if (_lastMapPosition != position.target) {
       print('Se mueve!');
     } */
-    _lastMapPosition = position.target;
+
+    //_lastMapPosition = position.target;
 
     //print(position.target);
     //TODO
@@ -159,15 +173,18 @@ class _MapScreenState extends State<MapScreen> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     if (index == 1) {
+      print('userIdMV');
+      print(userIdMV);
+      print(user_id);
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => TrendingScreen(),
+          builder: (context) => TrendingScreen(this.user_id),
         ),
       );
     } else if (index == 2) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ProfileScreen(),
+          builder: (context) => ProfileScreen(this.user_id),
         ),
       );
     }
@@ -228,7 +245,8 @@ class _MapScreenState extends State<MapScreen> {
             .where('geohash', isEqualTo: my_geohash)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          //print('Inicio');
+          //print('userIdMV');
+          //print(userIdMV);
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -237,14 +255,16 @@ class _MapScreenState extends State<MapScreen> {
           List<DocumentSnapshot> docs = data.documents;
           List<Postit> lista = loadData(docs);
           //print('---------------------');
-
+          if (userIdMV != null && user_id == '') {
+            user_id = userIdMV;
+          }
           //print('---------------------');
           //print('Fine');
           _displayCurrentLocation().then((salida) {
             setState(() {
               my_geohash = Geohash.encode(salida.latitude, salida.longitude)
                   .substring(0, 7);
-              print(my_geohash);
+              //print(my_geohash);
               _center = salida;
               //geohash_actual, geohash_anterior
               _refresh(lista, lista2, my_geohash, my_geohash_anterior, visible);

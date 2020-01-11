@@ -4,6 +4,8 @@ import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 class _PostitProfile {
@@ -38,23 +40,43 @@ int ContLikeTotals() {
 ///////////////////////////////////////////////////////////////////////////
 
 class ProfileScreen extends StatefulWidget {
+  ProfileScreen(this.userId);
+  String userId;
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState(this.userId);
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  _ProfileScreenState(this.userId);
   int _selectedIndex = 2;
+  String userId;
+
+  Future<LatLng> _displayCurrentLocation() async {
+    final location = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    //print("${location.latitude}, ${location.longitude}");
+
+    //print(_geohash.substring(0, 7));
+    return LatLng(location.latitude, location.longitude);
+  }
+
   void _onItemTapped(int index) {
     if (index == 0) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => MapScreen(),
-        ),
-      );
+      _displayCurrentLocation().then((salida) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MapScreen(salida, userId),
+          ),
+        );
+        //print('Geohash');
+        // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
+        //print('Hola');
+      });
     } else if (index == 1) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => TrendingScreen(),
+          builder: (context) => TrendingScreen(userId),
         ),
       );
     }
@@ -130,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircularProgressIndicator(),
             );
           }
-           
+
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: <Widget>[

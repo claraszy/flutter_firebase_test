@@ -1,3 +1,4 @@
+import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase/services/authentification.dart';
 import 'package:firebase/pages/LoginSignupPage.dart';
@@ -70,18 +71,14 @@ class _RootPageState extends State<RootPage> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return  LoginSignupPage(
+        return LoginSignupPage(
           auth: widget.auth,
           loginCallback: loginCallback,
         );
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return  MapScreen(
-           /* userId: _userId,
-            auth: widget.auth,
-            logoutCallback: logoutCallback,*/
-          );
+          return TrendingScreen(_userId);
         } else
           return buildWaitingScreen();
         break;
