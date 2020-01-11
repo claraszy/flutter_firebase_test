@@ -14,7 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geohash/geohash.dart';
 
 class MapScreen extends StatefulWidget {
-  MapScreen(this.location, final String userId,
+  MapScreen(this.location, this.userId,
       {Key key, this.auth, this.logoutCallback})
       : super(key: key);
 
