@@ -1,5 +1,8 @@
 //import 'package:firebase_database/firebase_database.dart';
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/widgets/TagRow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -35,14 +38,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   final db = Firestore.instance;
   final focus = FocusNode();
-  
- // bool estatOcult = ocult;
+
+  // bool estatOcult = ocult;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.greenAccent[100],
+      backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
           Expanded(
@@ -67,9 +70,9 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         child: FlatButton(
                           child: Icon(
                             Icons.thumbs_up_down,
-                            color: (ocult ? Colors.grey[400] : Colors.teal),
+                            color: (ocult ? Colors.grey[800] : Colors.teal),
                           ),
-                          onPressed: (){},
+                          onPressed: () {},
                           onLongPress: () {
                             setState(() {
                               ocult = !ocult;
@@ -96,7 +99,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         ),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Colors.grey[300],
                     ),
                     controller: _controller[0],
                     onSubmitted: (what) {
@@ -126,7 +129,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.grey[300],
                       ),
                       controller: _controller[1],
                       onSubmitted: (what) {},
@@ -148,7 +151,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         ),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Colors.grey[300],
                     ),
                     controller: _controller[2],
                     onSubmitted: (what) {
@@ -175,43 +178,36 @@ class _NewPostScreenState extends State<NewPostScreen> {
             flex: 1,
             child: Container(
               height: 50,
-              color: Colors.teal[400],
+              color: Colors.grey[300],
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 60.0, right: 50),
                     child: IconButton(
+                      hoverColor: Colors.red[900],
+                      tooltip: 'Cancel',
                       icon: Icon(
-                        Icons.cancel,
+                        Icons.close,
                         color: Colors.grey[700],
-                        size: 35,
+                        size: 25,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        bottom: 8.0,
-                        left: 19.0,
-                        right: 19.0,
-                      ),
-                      child: Container(
-                        width: 1,
-                        color: Colors.grey[700],
-                      ),
-                    ),
+                  Divider(
+                    thickness: 10,
+                    color: Colors.grey[300],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 60.0, left: 55),
                     child: IconButton(
                       icon: Icon(
-                        Icons.check_circle_outline,
-                        color: Colors.purple,
-                        size: 35,
+                        Icons.check,
+                        color: Colors.teal,
+                        size: 25,
                       ),
                       onPressed: () {
                         createPostit(
@@ -265,67 +261,4 @@ void printTag(List<String> tags) {
   TagRow(
     tags: tags,
   );
-}
-
-class TagRow extends StatefulWidget {
-  const TagRow({
-    Key key,
-    @required this.tags,
-  }) : super(key: key);
-
-  final List<String> tags;
-
-  @override
-  _TagRowState createState() => _TagRowState();
-}
-
-class _TagRowState extends State<TagRow> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // width: 300,
-      height: 50,
-      child: Center(
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.tags.length,
-          itemBuilder: (context, index) => InkWell(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Container(
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: StadiumBorder(
-                    side: BorderSide(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ),
-                width: 150,
-                height: 5,
-                child: Center(
-                  child: ListTile(
-                    leading: Center(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        child: Text(
-                          '# ' + widget.tags[index].toString(),
-                          overflow: TextOverflow.clip,
-                        )),
-                    onLongPress: () {
-                      setState(() {
-                        widget.tags.remove(widget.tags[index]);
-                      });
-                    },
-                    //title: Text('#${tags[index]}', style: TextStyle(fontSize: 12),),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
