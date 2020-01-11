@@ -7,6 +7,7 @@ import 'package:firebase/services/authentification.dart';
 import 'package:firebase/widgets/Drawer.dart';
 import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
+import 'package:firebase/widgets/TagRow.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,14 +29,14 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
-
   _MapScreenState(this._center, this.userIdMV);
-
   LatLng _center;
-
   String userIdMV;
   String user_id = '';
   final Set<Marker> _markers = {};
+  TextEditingController _searchedController;
+  List<String> searchedTags = [];
+  String sTag;
 
   //LatLng _lastMapPosition = LatLng(41.5640083, 2.0224067000000048);
 
@@ -47,6 +48,7 @@ class _MapScreenState extends State<MapScreen> {
   final lista2 = [];
   GoogleMapController mapController;
   void initstate() {
+    _searchedController = TextEditingController();
     super.initState();
     mapController.moveCamera(
       CameraUpdate.newCameraPosition(
@@ -59,6 +61,11 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
     //print('LLego al init');
+  }
+
+  void dispose() {
+    _searchedController.dispose();
+    super.dispose();
   }
 
   void _refresh(
@@ -211,148 +218,211 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Maps Sample App'),
-        backgroundColor: Colors.teal[900],
-      ),
-      drawer: drawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.teal[900],
-        iconSize: 20,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text("MAPA"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.teal[900],
+          iconSize: 20,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              title: Text("MAPA"),
             ),
-            title: Text("TENDENCIAS"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text("PERFIL"),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pinkAccent[400],
-        onTap: _onItemTapped,
-      ),
-      body: StreamBuilder(
-        stream: db
-            .collection('postit')
-            .where('geohash', isEqualTo: my_geohash)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          //print('userIdMV');
-          //print(userIdMV);
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          QuerySnapshot data = snapshot.data;
-          List<DocumentSnapshot> docs = data.documents;
-          List<Postit> lista = loadData(docs);
-          //print('---------------------');
-          if (userIdMV != null && user_id == '') {
-            user_id = userIdMV;
-          }
-          //print('---------------------');
-          //print('Fine');
-          _displayCurrentLocation().then((salida) {
-            setState(() {
-              my_geohash = Geohash.encode(salida.latitude, salida.longitude)
-                  .substring(0, 7);
-              //print(my_geohash);
-              _center = salida;
-              //geohash_actual, geohash_anterior
-              _refresh(lista, lista2, my_geohash, my_geohash_anterior, visible);
-            });
-            //print('Geohash');
-            // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
-            //print('Hola');
-          });
-
-          move_move();
-          //print("Centrooo");
-          //print(_center);
-          //print(my_geohash);
-          return Stack(
-            children: <Widget>[
-              //Expanded(flex: 1, child: Container(color: Colors.green,)),
-              GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 17.7,
-                ),
-                mapType: _currentMapType,
-                markers: _markers,
-                onCameraMove: _onCameraMove,
-                myLocationEnabled: true,
-                rotateGesturesEnabled: false,
-                scrollGesturesEnabled: false,
-                zoomGesturesEnabled: false,
-                tiltGesturesEnabled: false,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.favorite,
               ),
+              title: Text("TENDENCIAS"),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              title: Text("PERFIL"),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.pinkAccent[400],
+          onTap: _onItemTapped,
+        ),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  color: Colors.white.withOpacity(0.5),
+                  height: 15,
+                  child: Chip(
+                    label: TextField(
+                      controller: _searchedController,
+                      style: TextStyle(color: Colors.grey[700]),
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'Search a tag...'),
+                      onSubmitted: (sTag) {
+                        sTag = _searchedController.text.toString();
+                        setState(() {
+                          searchedTags.add(sTag);
+                        });
+                        print(sTag);
+                        print(searchedTags);
 
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        width: 36,
-                      ),
-                      FloatingActionButton(
-                        heroTag: 'btn1',
-                        onPressed: _onMapTypeButtonPressed,
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        backgroundColor: Colors.grey,
-                        child: const Icon(Icons.map, size: 36.0),
-                      ),
-                      //height: 16.0
-                      FloatingActionButton(
-                        heroTag: 'btn2',
-                        //onPressed: () => _onAddMarkerButtonPressed(),
+                        /// función que llama a la función que crea las chips de Tags
+                        printTag(searchedTags);
+                        _searchedController.clear();
+                      },
+                    ),
+                    //labelPadding: EdgeInsets.only(right: 230),
+                    backgroundColor: Colors.grey[200],
+                    avatar: CircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      foregroundColor: Colors.grey[700],
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          size: 15,
+                        ),
                         onPressed: () {
-                          _displayCurrentLocation().then((salida) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => NewPostScreen(salida),
-                              ),
-                            );
-                          });
-                        },
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        backgroundColor: Colors.grey,
-                        child: const Icon(Icons.add_location, size: 36.0),
-                      ),
-                      FloatingActionButton(
-                        heroTag: 'btn3',
-                        onPressed: () {
-                          //visible
+                          sTag = _searchedController.text.toString();
                           setState(() {
-                            visible = !visible;
+                            searchedTags.add(sTag);
                           });
-                          _onAddMarkerButtonPressed(lista, lista2, visible);
+                          print(sTag);
+                          print(searchedTags);
+                          _searchedController.clear();
                         },
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        backgroundColor: Colors.red,
-                        child: const Icon(Icons.satellite, size: 36.0),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ],
-          );
-        },
-      ),
-    );
+            ),
+            TagRow(
+              tags: searchedTags,
+            ),
+            Expanded(
+              flex: 4,
+              child: StreamBuilder(
+                stream: db
+                    .collection('postit')
+                    .where('geohash', isEqualTo: my_geohash)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  //print('userIdMV');
+                  //print(userIdMV);
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  QuerySnapshot data = snapshot.data;
+                  List<DocumentSnapshot> docs = data.documents;
+                  List<Postit> lista = loadData(docs);
+                  //print('---------------------');
+                  if (userIdMV != null && user_id == '') {
+                    user_id = userIdMV;
+                  }
+                  //print('---------------------');
+                  //print('Fine');
+                  _displayCurrentLocation().then((salida) {
+                    setState(() {
+                      my_geohash =
+                          Geohash.encode(salida.latitude, salida.longitude)
+                              .substring(0, 7);
+                      //print(my_geohash);
+                      _center = salida;
+                      //geohash_actual, geohash_anterior
+                      _refresh(lista, lista2, my_geohash, my_geohash_anterior,
+                          visible);
+                    });
+                    //print('Geohash');
+                    // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
+                    //print('Hola');
+                  });
+
+                  move_move();
+                  //print("Centrooo");
+                  //print(_center);
+                  //print(my_geohash);
+                  return Stack(
+                    children: <Widget>[
+                      //Expanded(flex: 1, child: Container(color: Colors.green,)),
+                      GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          target: _center,
+                          zoom: 17.7,
+                        ),
+                        mapType: _currentMapType,
+                        markers: _markers,
+                        onCameraMove: _onCameraMove,
+                        myLocationEnabled: true,
+                        rotateGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomGesturesEnabled: false,
+                        tiltGesturesEnabled: false,
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: 36,
+                              ),
+                              FloatingActionButton(
+                                heroTag: 'btn1',
+                                onPressed: _onMapTypeButtonPressed,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.padded,
+                                backgroundColor: Colors.grey,
+                                child: const Icon(Icons.map, size: 36.0),
+                              ),
+                              //height: 16.0
+                              FloatingActionButton(
+                                heroTag: 'btn2',
+                                //onPressed: () => _onAddMarkerButtonPressed(),
+                                onPressed: () {
+                                  _displayCurrentLocation().then((salida) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            NewPostScreen(salida),
+                                      ),
+                                    );
+                                  });
+                                },
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.padded,
+                                backgroundColor: Colors.grey,
+                                child:
+                                    const Icon(Icons.add_location, size: 36.0),
+                              ),
+                              FloatingActionButton(
+                                heroTag: 'btn3',
+                                onPressed: () {
+                                  //visible
+                                  setState(() {
+                                    visible = !visible;
+                                  });
+                                  _onAddMarkerButtonPressed(
+                                      lista, lista2, visible);
+                                },
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.padded,
+                                backgroundColor: Colors.red,
+                                child: const Icon(Icons.satellite, size: 36.0),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ));
   }
 }
 
