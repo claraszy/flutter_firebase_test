@@ -61,10 +61,12 @@ class _TrendingScreenState extends State<TrendingScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.teal[900],
         title: Text(
           'trending now',
+          style: TextStyle(color: Colors.teal),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -100,7 +102,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
-              child: LinearProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           }
 
@@ -108,10 +110,12 @@ class _TrendingScreenState extends State<TrendingScreen> {
           List<DocumentSnapshot> docs = data.documents;
           List<Postit> listaDePostits = loadData(docs);
           List<String> trendingTags = [];
+          //  List<int> trendingValoraciones = [];
           for (var i = 0; i < listaDePostits.length; i++) {
             for (var a = 0; a < listaDePostits[i].tags.length; a++) {
               if (!trendingTags.contains(listaDePostits[i].tags[a])) {
                 trendingTags.add(listaDePostits[i].tags[a]);
+                // trendingValoraciones.add(listaDePostits[i].valoraciones[a]);
               }
               if (trendingTags.length >= 10) {
                 break;
@@ -123,23 +127,33 @@ class _TrendingScreenState extends State<TrendingScreen> {
           if (userIdk != null && user_id == '') {
             user_id = userIdk;
           }
-          return ListView.builder(
-            itemCount: trendingTags.length,
-            reverse: false,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Container(
-                  child: Text(
-                    (index + 1).toString(),
-                    style: TextStyle(fontSize: 12),
+          return Scrollbar(
+            child: ListView.builder(
+              itemCount: trendingTags.length,
+              reverse: false,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Card(
+                    child: ListTile(
+                      leading: Container(
+                        child: Text(
+                          (index + 1).toString(),
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      title: Text(
+                        '#' + trendingTags[index],
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      dense: true,
+                      //trailing: Text(trendingValoraciones[index].toString() + ' valoraciones'),
+                      onLongPress: (){},
+                    ),
                   ),
-                ),
-                title: Text(
-                  trendingTags[index],
-                  style: TextStyle(fontSize: 12),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),
