@@ -7,6 +7,10 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+// HAY QUE PONERLE COLOR DE FONDO AL LIST VIEW (COLORS.GREY[300]) PARA QUE QUEDE UNIFORME
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 class _PostitProfile {
   String title, descripcion, location;
@@ -123,15 +127,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTap: _onItemTapped,
       ),
       appBar: AppBar(
+        elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          'ProfileScreen',
+          'name',
+          style: TextStyle(color: Colors.teal),
         ),
-        backgroundColor: Colors.teal[900],
+        backgroundColor: Colors.white,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.more_vert),
+              icon: Icon(Icons.edit),
               tooltip: 'Editar perfil',
               highlightColor: Colors.pink[150],
               onPressed: () {
@@ -186,24 +192,17 @@ class GranContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.teal,
+          color: Colors.white,
         ),
         height: 225,
         child: Column(
           children: <Widget>[
             BigDivider,
-            Text(
-              'name',
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
+            //  Text( 'name',style: TextStyle(  fontSize: 25,color: Colors.black, fontWeight: FontWeight.w900,), ),
             Divider,
             Text('@nickname',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.black,
                     fontWeight: FontWeight.w500)),
             BigDivider,
@@ -212,7 +211,7 @@ class GranContainer extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Colors.grey[100],
+                    color: Colors.grey[300],
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12.0),
                         topRight: Radius.circular(12.0))),
@@ -225,18 +224,22 @@ class GranContainer extends StatelessWidget {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text('  Post: '),
-                          Container(
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                            ),
-                            child: Text(
-                              '${vectorPostits.length}',
+                          Chip(
+                            backgroundColor: Colors.white,
+                            label: Text(
+                              'Posts: ${vectorPostits.length}',
+                              style: TextStyle(fontSize: 12),
                             ),
                           ),
                           Expanded(child: Container()),
-                          Text('Likes:  '),
+                          Chip(
+                            backgroundColor: Colors.white,
+                            label: Text(
+                              'Likes: ${ContLikeTotals().toString()} ',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          )
+                          /*Text('Likes:  '),
                           Container(
                             width: 30,
                             decoration: BoxDecoration(
@@ -244,6 +247,7 @@ class GranContainer extends StatelessWidget {
                             ),
                             child: Text('${ContLikeTotals().toString()}'),
                           )
+                          */
                         ],
                       ),
                       Divider,
@@ -276,7 +280,7 @@ class FotoPerfil extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Padding(
-        padding: const EdgeInsets.only(top: 100.0),
+        padding: const EdgeInsets.only(top: 80.0),
         child: Container(
           width: 80,
           height: 80,
@@ -308,33 +312,51 @@ class Lista_postits extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scrollbar(
       child: ListView.builder(
-          padding: const EdgeInsets.only(top: 215),
-          itemCount: vectorPostits.length,
-          itemBuilder: (context, index) => InkWell(
-                onTap: () {},
-                child: Card(
-                  child: ListTile(
-                    title: Text(
-                      vectorPostits[index].title,
-                    ),
-                    subtitle: Row(
-                      children: <Widget>[
-                        Text(vectorPostits[index].descripcion),
-                        Expanded(child: Container()),
-                        Icon(
-                          Icons.thumb_up,
-                          color: Colors.green,
-                        ),
-                        Text(vectorPostits[index].likes.toString()),
-                        prefix0.Container(width: 3),
-                        Icon(Icons.thumb_down, color: Colors.red),
-                        prefix0.Container(width: 1),
-                        Text(vectorPostits[index].dislikes.toString()),
-                      ],
-                    ),
-                  ),
+        padding: const EdgeInsets.only(top: 215),
+        itemCount: vectorPostits.length,
+        itemBuilder: (context, index) => InkWell(
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            child: Card(
+              elevation: 0.7,
+              child: ListTile(
+                title: Text(
+                  vectorPostits[index].title,
                 ),
-              )),
+                subtitle: Row(
+                  children: <Widget>[
+                    Text(
+                      vectorPostits[index].descripcion,
+                    ),
+                    Expanded(child: Container()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.thumb_up,
+                        color: Colors.green[800],
+                        size: 15,
+                      ),
+                    ),
+                    Text(vectorPostits[index].likes.toString()),
+                    prefix0.Container(width: 3),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.thumb_down,
+                        color: Colors.red[800],
+                        size: 15,
+                      ),
+                    ),
+                    prefix0.Container(width: 1),
+                    Text(vectorPostits[index].dislikes.toString()),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
