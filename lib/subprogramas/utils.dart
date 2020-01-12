@@ -22,20 +22,17 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
   return post;
 }
 
-List<Perfil> loadDataUser(List<DocumentSnapshot> users) {
+Perfil loadDataUser(users) {
   //print(docs);
-  List<Perfil> perfil = [];
-  for (var i = 0; i < users.length; i++) {
-    perfil.add(Perfil(
-      users[i].data['alias'],
-      users[i].data['email'],
-      users[i].data['foto'],
-      users[i].data['nombre'],
-      users[i].data['nPublicaciones'],
-      users[i].data['nValoraciones'],
-      users[i].data['pGustados'],
-      users[i].data['pVigentes'],
-    ));
-  }
+  Perfil perfil = Perfil(
+      users['alias'],
+      users['email'],
+      users['foto'],
+      users['nombre'],
+      users['nPublicaciones'],
+      users['nValoraciones'],
+      users['pGustados'],
+      users['pVigentes'],);
+  
   return perfil;
 }

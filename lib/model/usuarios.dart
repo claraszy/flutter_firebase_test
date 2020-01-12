@@ -1,4 +1,6 @@
 
+import 'package:firebase/subprogramas/utils.dart';
+
 class Perfil {
   String _alias, _email, _foto, _nombre;
   int _nPublicaciones, _nValoraciones;
@@ -15,3 +17,4 @@ class Perfil {
   get pGustados => _pGustados;
   get pVigentes => _pVigentes;
 }
+

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/model/usuarios.dart';
 import 'package:firebase/pages/EditProfileScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
+import 'package:firebase/subprogramas/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // HAY QUE PONERLE COLOR DE FONDO AL LIST VIEW (COLORS.GREY[300]) PARA QUE QUEDE UNIFORME
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 class _PostitProfile {
@@ -123,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pinkAccent[400],
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
       appBar: AppBar(
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          'name',
+          'Tu Perfil',
           style: TextStyle(color: Colors.teal),
         ),
         backgroundColor: Colors.white,
@@ -139,6 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
               icon: Icon(Icons.edit),
               tooltip: 'Editar perfil',
+              color: Colors.teal,
               highlightColor: Colors.pink[150],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -153,20 +154,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body: StreamBuilder(
-        stream: userdata.collection('users').snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapd) {
+        stream: userdata
+            .collection('usuarios')
+            .document("Pthm29uGoWu9mpwGhqZK")
+            .snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapd) {
           if (!snapd.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          print('userIdProfile');
-          print(this.userId);
+          // print('userIdProfile');
+          //print(this.userId);
+
+          //print(snapd.data.data);
+          print(snapd.data.data['alias']);
+
+          //List<DocumentSnapshot> alias = snapd.data.data['alias'];
+
+          Perfil listaDelUsuario = loadDataUser(snapd.data.data);
+
+          List<String> vectorUsuario = [];
+
+          print(listaDelUsuario.pVigentes);
+
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: <Widget>[
               Container(color: Colors.white, child: Lista_postits()),
-              GranContainer(BigDivider: BigDivider, Divider: Divider),
+              GranContainer(listaDelUsuario,BigDivider: BigDivider, Divider: Divider),
               FotoPerfil(),
             ],
           );
@@ -177,12 +193,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class GranContainer extends StatelessWidget {
-  const GranContainer({
+  const GranContainer(
+    this.perfil, {
     Key key,
     @required this.BigDivider,
     @required this.Divider,
   }) : super(key: key);
-
+    final Perfil perfil;
   final Container BigDivider;
   final Container Divider;
 
@@ -197,10 +214,10 @@ class GranContainer extends StatelessWidget {
         height: 225,
         child: Column(
           children: <Widget>[
-            BigDivider,
-            //  Text( 'name',style: TextStyle(  fontSize: 25,color: Colors.black, fontWeight: FontWeight.w900,), ),
+           
+             Text( perfil.nombre,style: TextStyle(  fontSize: 25,color: Colors.black, fontWeight: FontWeight.w900,), ),
             Divider,
-            Text('@nickname',
+            Text('@ ' + perfil.alias,
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -227,7 +244,7 @@ class GranContainer extends StatelessWidget {
                           Chip(
                             backgroundColor: Colors.white,
                             label: Text(
-                              'Posts: ${vectorPostits.length}',
+                              'Posts: '+ perfil.pVigentes.length.toString(),
                               style: TextStyle(fontSize: 12),
                             ),
                           ),
