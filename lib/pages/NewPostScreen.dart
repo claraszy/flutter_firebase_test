@@ -204,22 +204,39 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 60.0, left: 55),
                     child: IconButton(
-                      icon: Icon(
-                        Icons.check,
-                        color: Colors.teal,
-                        size: 25,
-                      ),
-                      onPressed: () {
-                        createPostit(
-                                posicion, _controller[0], _controller[1], tags)
-                            .then((salida) {
-                          //TODO
-                          //Devolver la referencia y añadir al usuario que ha hecho el upload
-                          print(salida);
-                          Navigator.of(context).pop(salida);
-                        });
-                      },
-                    ),
+                        icon: Icon(
+                          Icons.check,
+                          color: Colors.teal,
+                          size: 25,
+                        ),
+                        onPressed: () {
+                          if (_controller[0].text.isEmpty ||
+                              _controller[1].text.isEmpty ||
+                              tags.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Icon(Icons.warning),
+                                      content: Text('There are empty fields'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                        )
+                                      ],
+                                    ));
+                          } else {
+                            createPostit(posicion, _controller[0],
+                                    _controller[1], tags)
+                                .then((salida) {
+                              //TODO
+                              //Devolver la referencia y añadir al usuario que ha hecho el upload
+                              print(salida);
+                              Navigator.of(context).pop(salida);
+                            });
+                          }
+                        }),
                   ),
                 ],
               ),
