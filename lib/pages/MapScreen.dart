@@ -34,7 +34,6 @@ class _MapScreenState extends State<MapScreen> {
   String userIdMV;
   String user_id = '';
   final Set<Marker> _markers = {};
-  TextEditingController _searchedController;
   List<String> searchedTags = [];
   String sTag;
 
@@ -48,7 +47,6 @@ class _MapScreenState extends State<MapScreen> {
   final lista2 = [];
   GoogleMapController mapController;
   void initstate() {
-    _searchedController = TextEditingController();
     super.initState();
     mapController.moveCamera(
       CameraUpdate.newCameraPosition(
@@ -64,7 +62,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void dispose() {
-    _searchedController.dispose();
     super.dispose();
   }
 
@@ -252,12 +249,10 @@ class _MapScreenState extends State<MapScreen> {
                   height: 15,
                   child: Chip(
                     label: TextField(
-                      controller: _searchedController,
                       style: TextStyle(color: Colors.grey[700]),
                       decoration: InputDecoration.collapsed(
                           hintText: 'Search a tag...'),
                       onSubmitted: (sTag) {
-                        sTag = _searchedController.text.toString();
                         setState(() {
                           searchedTags.add(sTag);
                         });
@@ -266,7 +261,6 @@ class _MapScreenState extends State<MapScreen> {
 
                         /// función que llama a la función que crea las chips de Tags
                         printTag(searchedTags);
-                        _searchedController.clear();
                       },
                     ),
                     //labelPadding: EdgeInsets.only(right: 230),
@@ -274,20 +268,9 @@ class _MapScreenState extends State<MapScreen> {
                     avatar: CircleAvatar(
                       backgroundColor: Colors.grey[200],
                       foregroundColor: Colors.grey[700],
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          size: 15,
-                        ),
-                        onPressed: () {
-                          sTag = _searchedController.text.toString();
-                          setState(() {
-                            searchedTags.add(sTag);
-                          });
-                          print(sTag);
-                          print(searchedTags);
-                          _searchedController.clear();
-                        },
+                      child: Icon(
+                        Icons.search,
+                        size: 15,
                       ),
                     ),
                   ),
