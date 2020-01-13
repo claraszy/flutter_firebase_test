@@ -82,7 +82,9 @@ class _MapScreenState extends State<MapScreen> {
         var valoracion = lista_actual[i].valoraciones;
         //print(valoracion);
         List<String> tags = lista_actual[i].tags;
+        String referencias = lista_actual[i].referencias;
         _markers.add(Marker(
+
             // This marker id can be anything that uniquely identifies each marker.
             //TODO
             //Cambiar identificador, para que sea único.
@@ -92,7 +94,7 @@ class _MapScreenState extends State<MapScreen> {
             onTap: () {
               print('Tap');
               showFancyCustomDialog(
-                  context, titulo, descripcion, valoracion, tags);
+                  context, titulo, descripcion, valoracion, tags, referencias);
             }));
       }
 
@@ -112,9 +114,10 @@ class _MapScreenState extends State<MapScreen> {
           //print(titulo);
           var valoracion = lista_entrada[i].valoraciones;
           //print(valoracion);
-          List<String> tags = ["tags"];
-
+          List<String> tags = lista_entrada[i].tags;
+          String referencias = lista_entrada[i].referencias;
           _markers.add(Marker(
+
               // This marker id can be anything that uniquely identifies each marker.
               //TODO
               //Cambiar identificador, para que sea único.
@@ -123,8 +126,8 @@ class _MapScreenState extends State<MapScreen> {
               icon: BitmapDescriptor.defaultMarker,
               onTap: () {
                 print('Tap');
-                showFancyCustomDialog(
-                    context, titulo, descripcion, valoracion, tags, );
+                showFancyCustomDialog(context, titulo, descripcion, valoracion,
+                    tags, referencias);
               }));
         }
 
@@ -296,10 +299,12 @@ class _MapScreenState extends State<MapScreen> {
                   QuerySnapshot data = snapshot.data;
                   List<DocumentSnapshot> docs = data.documents;
                   List<Postit> lista = loadData(docs);
+
                   //print('---------------------');
                   if (userIdMV != null && user_id == '') {
                     user_id = userIdMV;
                   }
+
                   //print('---------------------');
                   //print('Fine');
                   _displayCurrentLocation().then((salida) {
@@ -408,8 +413,14 @@ class _MapScreenState extends State<MapScreen> {
   }
 }
 
-void showFancyCustomDialog(
-    BuildContext context, titulo, descripcion, valoraciones, tags) {
+void applyChanges(referencias, valoraciones) {
+  Firestore.instance.collection('postit').document(referencias).updateData({
+    "valoraciones": valoraciones,
+  });
+}
+
+void showFancyCustomDialog(BuildContext context, titulo, descripcion,
+    valoraciones, tags, referencias) {
   //List<String> tags = ['300', '111', '222', '3333', '444'];
   Dialog fancyDialog = Dialog(
     shape: RoundedRectangleBorder(
@@ -517,10 +528,12 @@ void showFancyCustomDialog(
                     ),
                     iconSize: 20,
                     onPressed: () {
-                      print('quiero restar valoracion');
                       setState() {
-                        valoraciones--;
+                        print('has restado');
+                        valoraciones = valoraciones - 1;
                       }
+
+                      applyChanges(referencias, valoraciones);
                     },
                   ),
                 ),
@@ -537,8 +550,13 @@ void showFancyCustomDialog(
                         color: Colors.green[900],
                       ),
                       onPressed: () {
-                        int valorPositivo = valoraciones++;
-                        print(valoraciones.toString() + 'holaaaa');
+                        
+                          valoraciones = valoraciones + 1;
+                          print(valoraciones);
+                      
+
+                        applyChanges(referencias, valoraciones);
+                        print('has sumado');
                       },
                     ),
                   ),

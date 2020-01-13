@@ -7,9 +7,10 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
   List<Postit> post = [];
   for (var i = 0; i < docs.length; i++) {
     List<String> tags = List<String>.from(docs[i].data['tags']);
-
+    // print(docs[i].documentID);
     //for (var pos = 0; i < docs[i].data['tags'].length; pos++) {}
-    post.add(Postit(
+    post.add(
+      Postit(
         docs[i].data['titulo'],
         docs[i].data['coordenadas'],
         docs[i].data['descripcion'],
@@ -17,7 +18,10 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
         docs[i].data['caducidad'],
         docs[i].data['geohash'],
         tags,
-        docs[i].data['ocult']));
+        docs[i].data['ocult'],
+        docs[i].documentID
+      ),
+    );
   }
   return post;
 }
@@ -25,14 +29,15 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
 Perfil loadDataUser(users) {
   //print(docs);
   Perfil perfil = Perfil(
-      users['alias'],
-      users['email'],
-      users['foto'],
-      users['nombre'],
-      users['nPublicaciones'],
-      users['nValoraciones'],
-      users['pGustados'],
-      users['pVigentes'],);
-  
+    users['alias'],
+    users['email'],
+    users['foto'],
+    users['nombre'],
+    users['nPublicaciones'],
+    users['nValoraciones'],
+    users['pGustados'],
+    users['pVigentes'],
+  );
+
   return perfil;
 }

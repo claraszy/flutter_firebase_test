@@ -10,9 +10,10 @@ class Postit {
   String _geohash;
   List <String> _tags;
   bool _oculto;
+  String _referencias;
 
   Postit(this._titulo, this._posicion, this._descripcion, this._valoraciones,
-      this._caducidad, this._geohash, this._tags, this._oculto);
+      this._caducidad, this._geohash, this._tags, this._oculto, this._referencias);
 
   get posicion => LatLng(_posicion.latitude, _posicion.longitude);
   get valoraciones => _valoraciones;
@@ -22,4 +23,6 @@ class Postit {
   get geohash => _geohash;
   get tags => _tags;
   get oculto => _oculto;
+  get referencias => _referencias;
 }
+
