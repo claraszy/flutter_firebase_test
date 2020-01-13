@@ -81,8 +81,7 @@ class _MapScreenState extends State<MapScreen> {
         //print(titulo);
         var valoracion = lista_actual[i].valoraciones;
         //print(valoracion);
-        List<String> tags = ["tags"];
-
+        List<String> tags = lista_actual[i].tags;
         _markers.add(Marker(
             // This marker id can be anything that uniquely identifies each marker.
             //TODO
@@ -125,7 +124,7 @@ class _MapScreenState extends State<MapScreen> {
               onTap: () {
                 print('Tap');
                 showFancyCustomDialog(
-                    context, titulo, descripcion, valoracion, tags);
+                    context, titulo, descripcion, valoracion, tags, );
               }));
         }
 
@@ -410,7 +409,7 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 void showFancyCustomDialog(
-    BuildContext context, titulo, descripcion, valoracion, tags) {
+    BuildContext context, titulo, descripcion, valoraciones, tags) {
   //List<String> tags = ['300', '111', '222', '3333', '444'];
   Dialog fancyDialog = Dialog(
     shape: RoundedRectangleBorder(
@@ -459,12 +458,18 @@ void showFancyCustomDialog(
             child: Container(
               height: 150,
               child: ListView(children: <Widget>[
-                Center(
-                    child: Text('Descripcion',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ))),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'Descripcion',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: Container(
@@ -475,7 +480,7 @@ void showFancyCustomDialog(
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 200.0),
+            padding: const EdgeInsets.only(top: 200.0, right: 8, left: 8),
             child: Container(
               height: 50,
               child: ListView.builder(
@@ -486,27 +491,10 @@ void showFancyCustomDialog(
                   child: Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: Container(
-                      decoration: ShapeDecoration(
-                        color: Colors.grey[100],
-                        shape: StadiumBorder(
-                          side: BorderSide(
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                      width: 150,
-                      height: 5,
-                      child: Center(
-                        child: ListTile(
-                          leading: Center(
-                              widthFactor: 1,
-                              heightFactor: 1,
-                              child: Text(
-                                '# ' + tags[index].toString(),
-                                overflow: TextOverflow.clip,
-                              )),
-
-                          //title: Text('#${tags[index]}', style: TextStyle(fontSize: 12),),
+                      child: Chip(
+                        label: Text(
+                          '# ' + tags[index].toString(),
+                          overflow: TextOverflow.clip,
                         ),
                       ),
                     ),
@@ -522,33 +510,19 @@ void showFancyCustomDialog(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "-",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.thumb_down,
+                      color: Colors.red[900],
                     ),
+                    iconSize: 20,
+                    onPressed: () {
+                      print('quiero restar valoracion');
+                      setState() {
+                        valoraciones--;
+                      }
+                    },
                   ),
-                ),
-                Container(
-                  //color: Colors.grey,
-                  child: Text(valoracion.toString()),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -556,27 +530,24 @@ void showFancyCustomDialog(
                     bottom: 8.0,
                   ),
                   child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.thumb_up,
+                        size: 20,
+                        color: Colors.green[900],
                       ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "+",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
+                      onPressed: () {
+                        int valorPositivo = valoraciones++;
+                        print(valoraciones.toString() + 'holaaaa');
+                      },
                     ),
+                  ),
+                ),
+                Container(
+                  //color: Colors.grey,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 100.0),
+                    child: Text(valoraciones.toString()),
                   ),
                 ),
               ],
