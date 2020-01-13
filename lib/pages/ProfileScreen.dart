@@ -163,22 +163,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Colors.teal,
               highlightColor: Colors.pink[150],
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EditProfileScreen(Objeto(
-                          'Nuevo nombre',
-                          'Nuevo username',
-                          'new email',
-                          '2020',
-                          '2020',
-                        ))));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(
+                      userId,
+                      Objeto(
+                        'Nuevo nombre',
+                        'Nuevo username',
+                        'new email',
+                        '2020',
+                        '2020',
+                      ),
+                    ),
+                  ),
+                );
               })
         ],
       ),
       body: StreamBuilder(
-        stream: userdata
-            .collection('usuarios')
-            .document("Pthm29uGoWu9mpwGhqZK")
-            .snapshots(),
+        stream: userdata.collection('usuarios').document(userId).snapshots(),
+        //todooo reemplazar  Pthm29uGoWu9mpwGhqZK por userid
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapd) {
           if (!snapd.hasData) {
             return Center(
@@ -189,6 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //print(this.userId);
 
           //print(snapd.data.data);
+          print('HOLA');
           print(snapd.data.data['alias']);
 
           //List<DocumentSnapshot> alias = snapd.data.data['alias'];
@@ -196,15 +201,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Perfil listaDelUsuario = loadDataUser(snapd.data.data);
 
           List<String> vectorUsuario = [];
-
+          print('listaDelUsuario.pVigentes');
           print(listaDelUsuario.pVigentes);
 
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: <Widget>[
               //Container(color: Colors.white, child: Lista_postits()),
-              GranContainer(listaDelUsuario,
-                BigDivider: BigDivider, Divider: Divider),
+              GranContainer(listaDelUsuario, listaDelUsuario.pVigentes, userId,
+                  BigDivider: BigDivider, Divider: Divider),
               FotoPerfil(),
             ],
           );
@@ -216,14 +221,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 class GranContainer extends StatelessWidget {
   const GranContainer(
-    this.perfil, {
+    this.perfil,
+    this.pVigentes,
+    this.user_id, {
     Key key,
     @required this.BigDivider,
     @required this.Divider,
   }) : super(key: key);
+  final List<dynamic> pVigentes;
   final Perfil perfil;
   final Container BigDivider;
   final Container Divider;
+  final String user_id;
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +242,6 @@ class GranContainer extends StatelessWidget {
           shape: BoxShape.rectangle,
           color: Colors.white,
         ),
-       
         child: Column(
           children: <Widget>[
             Text(
@@ -295,7 +303,6 @@ class GranContainer extends StatelessWidget {
                           */
                         ],
                       ),
-                      
                       Text(
                         'E-mail:',
                         style: TextStyle(
@@ -312,14 +319,14 @@ class GranContainer extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       RaisedButton(
                         child: Text('ishdf'),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ListPostitsScreen(),));
-
-                        } ,
+                            builder: (context) =>
+                                ListPostitsScreen(pVigentes, user_id, 0),
+                          ));
+                        },
                       )
                     ],
                   ),

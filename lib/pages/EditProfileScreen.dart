@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 /////////////////////////////////////////////////////////////////////////////
@@ -13,16 +14,17 @@ class Objeto {
 
 class EditProfileScreen extends StatefulWidget {
   final Objeto cosa;
-  EditProfileScreen(this.cosa);
-
+  EditProfileScreen(this.userId, this.cosa);
+  String userId;
   @override
-  _EditProfileScreenState createState() => _EditProfileScreenState();
+  _EditProfileScreenState createState() => _EditProfileScreenState(this.userId);
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  _EditProfileScreenState(this.userId);
   //TextEditingController _controller;
   List<TextEditingController> _controller;
-
+  String userId;
   void initState() {
     //_controller = TextEditingController();
     //_controller = [for (int i = 0; i < 3; i++) TextEditingController(),];
@@ -45,6 +47,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     ];
     super.initState();
+  }
+
+  void applyChanges(referencias, controler) {
+    print(controler[0].text);
+    Firestore.instance.collection('usuarios').document(referencias).updateData({
+      "nombre": controler[0].text,
+      "alias": controler[1].text,
+    });
   }
 
   @override
@@ -97,15 +107,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 RaisedButton(
                   child: Text('Guardar'),
                   onPressed: () {
-                    Navigator.of(context).pop(
-                      Objeto(
-                        _controller[0].text,
-                        _controller[1].text,
-                        _controller[2].text,
-                        _controller[3].text,
-                        _controller[4].text,
-                      ),
-                    );
+                    applyChanges(userId, _controller);
+                    Navigator.of(context).pop();
                   },
                 ),
               ],
