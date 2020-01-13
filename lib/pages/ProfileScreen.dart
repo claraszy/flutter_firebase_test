@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/model/usuarios.dart';
 import 'package:firebase/pages/EditProfileScreen.dart';
+import 'package:firebase/pages/ListPostitsScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:firebase/pages/root_page.dart';
@@ -44,9 +45,7 @@ int ContLikeTotals() {
   return LikesTotals;
 }
 
-
- final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
+final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -62,10 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 2;
   String userId;
 
-
-   _signOut() async {
+  _signOut() async {
     await _firebaseAuth.signOut();
-   }
+  }
 
   Future<LatLng> _displayCurrentLocation() async {
     final location = await Geolocator()
@@ -150,16 +148,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         leading: IconButton(
           icon: Icon(Icons.exit_to_app),
           tooltip: 'Log out',
-            color: Colors.teal,
-            onPressed: (){
-              
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context)=> RootPage(auth:  Auth())
-              )).then(_signOut());
-            },
+          color: Colors.teal,
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => RootPage(auth: Auth())))
+                .then(_signOut());
+          },
         ),
         actions: <Widget>[
-        
           IconButton(
               icon: Icon(Icons.edit),
               tooltip: 'Editar perfil',
@@ -205,8 +202,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: <Widget>[
-              Container(color: Colors.white, child: Lista_postits()),
-              GranContainer(listaDelUsuario,BigDivider: BigDivider, Divider: Divider),
+              //Container(color: Colors.white, child: Lista_postits()),
+              GranContainer(listaDelUsuario,
+                BigDivider: BigDivider, Divider: Divider),
               FotoPerfil(),
             ],
           );
@@ -223,7 +221,7 @@ class GranContainer extends StatelessWidget {
     @required this.BigDivider,
     @required this.Divider,
   }) : super(key: key);
-    final Perfil perfil;
+  final Perfil perfil;
   final Container BigDivider;
   final Container Divider;
 
@@ -235,11 +233,17 @@ class GranContainer extends StatelessWidget {
           shape: BoxShape.rectangle,
           color: Colors.white,
         ),
-        height: 225,
+       
         child: Column(
           children: <Widget>[
-           
-             Text( perfil.nombre,style: TextStyle(  fontSize: 25,color: Colors.black, fontWeight: FontWeight.w900,), ),
+            Text(
+              perfil.nombre,
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.black,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
             Divider,
             Text('@ ' + perfil.alias,
                 style: TextStyle(
@@ -268,7 +272,7 @@ class GranContainer extends StatelessWidget {
                           Chip(
                             backgroundColor: Colors.white,
                             label: Text(
-                              'Posts: '+ perfil.pVigentes.length.toString(),
+                              'Posts: ' + perfil.pVigentes.length.toString(),
                               style: TextStyle(fontSize: 12),
                             ),
                           ),
@@ -291,15 +295,32 @@ class GranContainer extends StatelessWidget {
                           */
                         ],
                       ),
-                      Divider,
+                      
                       Text(
-                        'what you posted',
+                        'E-mail:',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      Text(
+                        perfil.email,
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+
+                      RaisedButton(
+                        child: Text('ishdf'),
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ListPostitsScreen(),));
+
+                        } ,
+                      )
                     ],
                   ),
                 ),
