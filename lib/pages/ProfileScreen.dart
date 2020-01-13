@@ -3,7 +3,10 @@ import 'package:firebase/model/usuarios.dart';
 import 'package:firebase/pages/EditProfileScreen.dart';
 import 'package:firebase/pages/MapScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
+import 'package:firebase/pages/root_page.dart';
+import 'package:firebase/services/authentification.dart';
 import 'package:firebase/subprogramas/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:geolocator/geolocator.dart';
@@ -41,6 +44,10 @@ int ContLikeTotals() {
   return LikesTotals;
 }
 
+
+ final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 class ProfileScreen extends StatefulWidget {
@@ -54,6 +61,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState(this.userId);
   int _selectedIndex = 2;
   String userId;
+
+
+   _signOut() async {
+    await _firebaseAuth.signOut();
+   }
 
   Future<LatLng> _displayCurrentLocation() async {
     final location = await Geolocator()
@@ -135,7 +147,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(color: Colors.teal),
         ),
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.exit_to_app),
+          tooltip: 'Log out',
+            color: Colors.teal,
+            onPressed: (){
+              
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context)=> RootPage(auth:  Auth())
+              )).then(_signOut());
+            },
+        ),
         actions: <Widget>[
+        
           IconButton(
               icon: Icon(Icons.edit),
               tooltip: 'Editar perfil',
