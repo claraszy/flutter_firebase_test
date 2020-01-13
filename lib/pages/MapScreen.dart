@@ -285,10 +285,7 @@ class _MapScreenState extends State<MapScreen> {
             Expanded(
               flex: 4,
               child: StreamBuilder(
-                stream: db
-                    .collection('postit')
-                    .where('geohash', isEqualTo: my_geohash)
-                    .snapshots(),
+                stream: descargador(searchedTags),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   //print('userIdMV');
                   //print(userIdMV);
@@ -411,6 +408,20 @@ class _MapScreenState extends State<MapScreen> {
           ],
         ));
   }
+
+  Stream<QuerySnapshot> descargador(List<String> listaTags) {
+    if (listaTags.length > 0) {
+      return db
+          .collection('postit')
+          .where('geohash', isEqualTo: my_geohash).where('tags', arrayContainsAny: listaTags )
+          .snapshots();
+    } else {
+      return db
+          .collection('postit')
+          .where('geohash', isEqualTo: my_geohash)
+          .snapshots();
+    }
+  }
 }
 
 void applyChanges(referencias, valoraciones) {
@@ -447,7 +458,7 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
             height: 50,
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
-              color: Colors.teal[900],
+              color: Colors.grey[700],
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -550,10 +561,8 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
                         color: Colors.green[900],
                       ),
                       onPressed: () {
-                        
-                          valoraciones = valoraciones + 1;
-                          print(valoraciones);
-                      
+                        valoraciones = valoraciones + 1;
+                        print(valoraciones);
 
                         applyChanges(referencias, valoraciones);
                         print('has sumado');
