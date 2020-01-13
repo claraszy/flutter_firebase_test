@@ -70,8 +70,12 @@ class _TrendingScreenState extends State<TrendingScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.teal[900],
-        iconSize: 20,
+        selectedFontSize: 13,
+        unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+        unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
+        backgroundColor: Colors.grey[200],
+        iconSize: 24,
+        //type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
@@ -79,7 +83,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.favorite,
+              Icons.flash_on,
             ),
             title: Text("TENDENCIAS"),
           ),
@@ -89,7 +93,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pinkAccent[400],
+        selectedItemColor: Colors.teal,
         onTap: _onItemTapped,
       ),
       body: StreamBuilder(
@@ -148,7 +152,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
                       ),
                       dense: true,
                       //trailing: Text(trendingValoraciones[index].toString() + ' valoraciones'),
-                      onLongPress: (){},
+                      onLongPress: () {},
                     ),
                   ),
                 );

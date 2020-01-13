@@ -114,8 +114,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.teal[900],
-        iconSize: 20,
+        selectedFontSize: 13,
+        unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+        unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
+        backgroundColor: Colors.grey[200],
+        iconSize: 24,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
@@ -123,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.favorite,
+              Icons.flash_on,
             ),
             title: Text("TENDENCIAS"),
           ),
@@ -133,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Colors.teal,
         onTap: _onItemTapped,
       ),
       appBar: AppBar(

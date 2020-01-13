@@ -218,8 +218,11 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.teal[900],
-          iconSize: 20,
+          selectedFontSize: 13,
+          unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+          unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
+          backgroundColor: Colors.grey[200],
+          iconSize: 24,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
@@ -227,7 +230,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.favorite,
+                Icons.flash_on,
               ),
               title: Text("TENDENCIAS"),
             ),
@@ -237,7 +240,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.pinkAccent[400],
+          selectedItemColor: Colors.teal,
           onTap: _onItemTapped,
         ),
         body: Column(
@@ -359,7 +362,7 @@ class _MapScreenState extends State<MapScreen> {
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.padded,
                                 backgroundColor: Colors.grey,
-                                child: const Icon(Icons.map, size: 36.0),
+                                child: const Icon(Icons.satellite, size: 36.0),
                               ),
                               //height: 16.0
                               FloatingActionButton(
@@ -394,7 +397,7 @@ class _MapScreenState extends State<MapScreen> {
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.padded,
                                 backgroundColor: Colors.red,
-                                child: const Icon(Icons.satellite, size: 36.0),
+                                child: const Icon(Icons.remove_red_eye, size: 36.0),
                               )
                             ],
                           ),
@@ -413,7 +416,8 @@ class _MapScreenState extends State<MapScreen> {
     if (listaTags.length > 0) {
       return db
           .collection('postit')
-          .where('geohash', isEqualTo: my_geohash).where('tags', arrayContainsAny: listaTags )
+          .where('geohash', isEqualTo: my_geohash)
+          .where('tags', arrayContainsAny: listaTags)
           .snapshots();
     } else {
       return db
