@@ -21,6 +21,7 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
   List<dynamic> pVigentes;
   String user_id;
   int indice;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -175,13 +176,23 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                             .collection('postit')
                                             .document(pVigentes[indice])
                                             .updateData(
-                                                {'caducidad': Timestamp.now()});
+                                                {'caducidad': Timestamp.fromDate(DateTime.now())});
+                                        
                                         if (pVigentes.length - 1 > indice) {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   ListPostitsScreen(pVigentes,
                                                       user_id, indice + 1),
+                                            ),
+                                          );
+                                        } else {
+                                          AlertDialog(
+                                            backgroundColor: Colors.white,
+                                            title: Text(
+                                              "There are no posts",
+                                              style:
+                                                  TextStyle(color: Colors.teal),
                                             ),
                                           );
                                         }
