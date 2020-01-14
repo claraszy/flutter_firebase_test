@@ -16,23 +16,26 @@ import 'package:geohash/geohash.dart';
 
 class MapScreen extends StatefulWidget {
   MapScreen(this.location, this.userId,
-      {Key key, this.auth, this.logoutCallback})
+      {Key key, this.auth, this.logoutCallback, this.tag_trending})
       : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   String userId;
   LatLng location;
+  String tag_trending = '';
   @override
-  _MapScreenState createState() => _MapScreenState(this.location, this.userId);
+  _MapScreenState createState() => _MapScreenState(this.location, this.userId,
+      tag_trending: this.tag_trending);
 }
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
-  _MapScreenState(this._center, this.userIdMV);
+  _MapScreenState(this._center, this.userIdMV, {this.tag_trending});
   LatLng _center;
   String userIdMV;
   String user_id = '';
+  String tag_trending;
   final Set<Marker> _markers = {};
   List<String> searchedTags = [];
   String sTag;
@@ -140,18 +143,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _onCameraMove(CameraPosition position) {
-    /*if (_lastMapPosition != position.target) {
-      print('Se mueve!');
-    } */
-
-    //_lastMapPosition = position.target;
-
-    //print(position.target);
-    //TODO
-    //Se debería de explotar un poco mas esta funcionalidad
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
     //mapController = controller;
@@ -179,9 +170,9 @@ class _MapScreenState extends State<MapScreen> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     if (index == 1) {
-      print('userIdMV');
-      print(userIdMV);
-      print(user_id);
+      //print('userIdMV');
+      //print(userIdMV);
+      //print(user_id);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => TrendingScreen(this.user_id),
@@ -261,8 +252,8 @@ class _MapScreenState extends State<MapScreen> {
                         setState(() {
                           searchedTags.add(sTag);
                         });
-                        print(sTag);
-                        print(searchedTags);
+                        //print(sTag);
+                        //print(searchedTags);
 
                         /// función que llama a la función que crea las chips de Tags
                         printTag(searchedTags);
@@ -322,6 +313,12 @@ class _MapScreenState extends State<MapScreen> {
                     // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
                     //print('Hola');
                   });
+                  if (tag_trending != '' && tag_trending != null) {
+                    searchedTags.add(tag_trending);
+                    tag_trending = '';
+                    //searchedTags
+                    print(tag_trending);
+                  }
 
                   move_move();
                   //print("Centrooo");
@@ -338,7 +335,6 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                         mapType: _currentMapType,
                         markers: _markers,
-                        onCameraMove: _onCameraMove,
                         myLocationEnabled: true,
                         rotateGesturesEnabled: false,
                         scrollGesturesEnabled: false,
@@ -349,13 +345,10 @@ class _MapScreenState extends State<MapScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Align(
-                          alignment: Alignment.topRight,
+                          alignment: Alignment.topLeft,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Container(
-                                width: 36,
-                              ),
                               FloatingActionButton(
                                 heroTag: 'btn1',
                                 onPressed: _onMapTypeButtonPressed,
@@ -370,12 +363,22 @@ class _MapScreenState extends State<MapScreen> {
                                 //onPressed: () => _onAddMarkerButtonPressed(),
                                 onPressed: () {
                                   _displayCurrentLocation().then((salida) {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context)
+                                        .push(
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             NewPostScreen(salida),
                                       ),
-                                    );
+                                    )
+                                        .then((id_posit) {
+                                      /*
+                                      TOOOOODOOOOO
+                                      Firestore.instance
+                                      .collection('usuarios')
+                                      .document(user_id).setData('data':id_posit)
+                                      //.add({ who: "third@test.com", when: new Date() })
+                                      */
+                                    });
                                   });
                                 },
                                 materialTapTargetSize:
@@ -397,8 +400,12 @@ class _MapScreenState extends State<MapScreen> {
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.padded,
                                 backgroundColor: Colors.red,
-                                child: const Icon(Icons.remove_red_eye, size: 36.0),
-                              )
+                                child: const Icon(Icons.remove_red_eye,
+                                    size: 36.0),
+                              ),
+                              Container(
+                                width: 36,
+                              ),
                             ],
                           ),
                         ),
@@ -423,6 +430,7 @@ class _MapScreenState extends State<MapScreen> {
       return db
           .collection('postit')
           .where('geohash', isEqualTo: my_geohash)
+          .where('ocult', isEqualTo: false)
           .snapshots();
     }
   }
@@ -543,12 +551,11 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
                     ),
                     iconSize: 20,
                     onPressed: () {
-                      setState() {
-                        print('has restado');
-                        valoraciones = valoraciones - 1;
-                      }
+                      //print('has restado');
+                      valoraciones = valoraciones - 1;
 
                       applyChanges(referencias, valoraciones);
+                      Navigator.pop(context);
                     },
                   ),
                 ),
@@ -570,6 +577,7 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
 
                         applyChanges(referencias, valoraciones);
                         print('has sumado');
+                        Navigator.pop(context);
                       },
                     ),
                   ),

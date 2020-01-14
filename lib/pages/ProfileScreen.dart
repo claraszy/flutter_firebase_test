@@ -320,18 +320,24 @@ class GranContainer extends StatelessWidget {
                         child: Container(
                           height: 130,
                           width: 100,
-                          
                           child: RaisedButton(
                             elevation: 7,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
                             color: Colors.teal[300],
                             splashColor: Colors.teal[100],
-                            child: Text('See your posts', style: TextStyle(height: 1.5, color: Colors.white),),
+                            child: Text(
+                              'See your posts',
+                              style:
+                                  TextStyle(height: 1.5, color: Colors.white),
+                            ),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    ListPostitsScreen(pVigentes, user_id, 0),
-                              ));
+                              if (pVigentes.length > 0) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ListPostitsScreen(pVigentes, user_id, 0),
+                                ));
+                              }
                             },
                           ),
                         ),

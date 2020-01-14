@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/services/authentification.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -32,6 +33,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     }
     return false;
   }
+
   Future<LatLng> _displayCurrentLocation() async {
     final location = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -41,6 +43,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     //print(_geohash.substring(0, 7));
     return LatLng(location.latitude, location.longitude);
   }
+
   // Perform login or signup
   void validateAndSubmit() async {
     setState(() {
@@ -52,13 +55,27 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
       try {
         if (_isLoginForm) {
           userId = await widget.auth.signIn(_email, _password);
-          print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
+          Firestore.instance.collection('usuarios').document(userId).setData({
+            'alias': 'Nickname',
+            'email': _email,
+            'foto': 'url',
+            "nombre": 'Name',
+            'pGustados': [],
+            'pVigentes': [],
+            'nPublicaciones': 0,
+            'nValoraciones': 0
+          });
+          print('------------------');
+          setState(() {
+            _isLoginForm = !_isLoginForm;
+          });
         }
+
         setState(() {
           _isLoading = false;
         });

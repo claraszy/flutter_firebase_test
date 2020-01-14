@@ -22,7 +22,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   List<String> tags = [];
   String etiqueta;
   LatLng posicion;
-  bool ocult = true;
+  bool ocult = false;
   _NewPostScreenState(this.posicion);
   void initState() {
     _controller = [

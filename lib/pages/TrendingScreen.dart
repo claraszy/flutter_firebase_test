@@ -125,6 +125,9 @@ class _TrendingScreenState extends State<TrendingScreen> {
                 break;
               }
             }
+            if (trendingTags.length >= 10) {
+              break;
+            }
           }
           //print('userIdk');
           //print(user_id);

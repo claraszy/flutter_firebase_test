@@ -11,16 +11,15 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
     //for (var pos = 0; i < docs[i].data['tags'].length; pos++) {}
     post.add(
       Postit(
-        docs[i].data['titulo'],
-        docs[i].data['coordenadas'],
-        docs[i].data['descripcion'],
-        docs[i].data['valoraciones'],
-        docs[i].data['caducidad'],
-        docs[i].data['geohash'],
-        tags,
-        docs[i].data['ocult'],
-        docs[i].documentID
-      ),
+          docs[i].data['titulo'],
+          docs[i].data['coordenadas'],
+          docs[i].data['descripcion'],
+          docs[i].data['valoraciones'],
+          docs[i].data['caducidad'],
+          docs[i].data['geohash'],
+          tags,
+          docs[i].data['ocult'],
+          docs[i].documentID),
     );
   }
   return post;
@@ -28,6 +27,15 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
 
 Perfil loadDataUser(users) {
   //print(docs);
+  print(users['nValoraciones']);
+  List auxiliares_pgustados = [];
+  List auxiliares_pVigentes = [];
+  if (users['pGustados'] != null) {
+    auxiliares_pgustados = users['pGustados'];
+  }
+  if (users['pVigentes'] != null) {
+    auxiliares_pVigentes = users['pVigentes'];
+  }
   Perfil perfil = Perfil(
     users['alias'],
     users['email'],
@@ -35,8 +43,8 @@ Perfil loadDataUser(users) {
     users['nombre'],
     users['nPublicaciones'],
     users['nValoraciones'],
-    users['pGustados'],
-    users['pVigentes'],
+    auxiliares_pgustados,
+    auxiliares_pVigentes,
   );
 
   return perfil;
