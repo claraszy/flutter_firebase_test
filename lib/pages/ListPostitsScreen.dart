@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/model/postit.dart';
 import 'package:firebase/subprogramas/utils.dart';
+import 'package:firebase/widgets/TagRow.dart';
 import 'package:flutter/material.dart';
 
 import 'ProfileScreen.dart';
@@ -60,6 +61,11 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                 snapd.data.data['oculto'],
                 snapd.data.data['referencias']);
 
+            List<String> postTags = [];
+            for (var i = 0; i < postit.tags.length; i++) {
+              postTags.add(postit.tags[i]);
+            }
+            print(postTags);
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -110,21 +116,29 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                   ),
                                 ),
                                 Container(
-                                    width: 250,
-                                    height: 200,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Scrollbar(
-                                        child: ListView(
-                                          children: <Widget>[
-                                            Text(
-                                              postit.descripcion,
-                                              textAlign: TextAlign.center,
-                                            )
-                                          ],
-                                        ),
+                                  width: 250,
+                                  height: 150,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Scrollbar(
+                                      child: ListView(
+                                        children: <Widget>[
+                                          Text(
+                                            postit.descripcion,
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ],
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 60,
+                                  width: 230,
+                                  child: TagRow(
+                                    tags: postTags,
+                                  ),
+                                ),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
@@ -138,7 +152,7 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                               postit.valoraciones.toString()),
                                           onDeleted: () {},
                                           label: Text(
-                                            ' Valoration: ',
+                                            ' Valorations: ',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 10),
@@ -157,8 +171,11 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                         color: Colors.grey[600],
                                       ),
                                       onPressed: () {
-                                        postit.caducidad.updateData(
-                                            {'caducidad': Timestamp.now()});
+                                        Firestore.instance
+                                            .collection('postit')
+                                            .document(pVigentes[indice])
+                                            .updateData(
+                                                {'caducidad': Timestamp.now()});
                                         if (pVigentes.length - 1 > indice) {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
