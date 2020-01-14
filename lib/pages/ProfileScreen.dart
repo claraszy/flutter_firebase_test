@@ -143,11 +143,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text(
-          'Tu Perfil',
-          style: TextStyle(color: Colors.teal),
-        ),
-        backgroundColor: Colors.white,
+        // title: Text( 'Tu Perfil', style: TextStyle(color: Colors.teal), ),
+        backgroundColor: Colors.grey[300],
         leading: IconButton(
           icon: Icon(Icons.exit_to_app),
           tooltip: 'Log out',
@@ -243,14 +240,14 @@ class GranContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.white,
+          color: Colors.grey[300],
         ),
         child: Column(
           children: <Widget>[
             Text(
               perfil.nombre,
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.w900,
               ),
@@ -267,7 +264,7 @@ class GranContainer extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Colors.grey[300],
+                    color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12.0),
                         topRight: Radius.circular(12.0))),
@@ -281,7 +278,7 @@ class GranContainer extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Chip(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.grey[300],
                             label: Text(
                               'Posts: ' + perfil.pVigentes.length.toString(),
                               style: TextStyle(fontSize: 12),
@@ -289,47 +286,55 @@ class GranContainer extends StatelessWidget {
                           ),
                           Expanded(child: Container()),
                           Chip(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.grey[300],
                             label: Text(
                               'Likes: ${ContLikeTotals().toString()} ',
                               style: TextStyle(fontSize: 12),
                             ),
                           )
-                          /*Text('Likes:  '),
-                          Container(
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                            ),
-                            child: Text('${ContLikeTotals().toString()}'),
-                          )
-                          */
                         ],
                       ),
-                      Text(
+                      /*Text(
                         'E-mail:',
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
                         ),
+                      ),*/
+                      SizedBox(
+                        height: 50,
                       ),
-                      Text(
-                        perfil.email,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                      Center(
+                        child: Text(
+                          perfil.email,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
-                      RaisedButton(
-                        child: Text('ishdf'),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ListPostitsScreen(pVigentes, user_id, 0),
-                          ));
-                        },
+                      SizedBox(height: 10),
+                      Center(
+                        child: Container(
+                          height: 130,
+                          width: 100,
+                          
+                          child: RaisedButton(
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                            color: Colors.teal[300],
+                            splashColor: Colors.teal[100],
+                            child: Text('See your posts', style: TextStyle(height: 1.5, color: Colors.white),),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    ListPostitsScreen(pVigentes, user_id, 0),
+                              ));
+                            },
+                          ),
+                        ),
                       )
                     ],
                   ),

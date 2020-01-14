@@ -24,13 +24,15 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          'Tus post',
-          style: TextStyle(color: Colors.teal),
+          'your posts',
+          style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold),
         ),
       ),
       body: StreamBuilder(
@@ -61,18 +63,19 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 50),
                 Expanded(
-                  flex: 1,
-                  child: Container(),
-                ),
-                Expanded(
-                    flex: 3,
+                    flex: 6,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IconButton(
                           //skip_previous
-                          icon: Icon(Icons.skip_previous, size: 36.0),
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            size: 30.0,
+                            color: Colors.grey[400],
+                          ),
                           onPressed: () {
                             if (indice > 0) {
                               Navigator.of(context).push(
@@ -85,25 +88,65 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                           },
                         ),
                         Container(
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Text(postit.titulo),
-                              ),
-                              Container(
-                                  width: 270,
-                                  child: Text(
-                                    postit.descripcion,
-                                    textAlign: TextAlign.center,
-                                  )),
-                              Container(
-                                  child: Text(postit.valoraciones.toString())),
-                            ],
+                          child: Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            elevation: 3,
+                            color: Colors.grey[300],
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 250,
+                                  height: 40,
+                                  color: Colors.grey,
+                                  child: Center(
+                                    child: Text(
+                                      postit.titulo,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                    width: 250,
+                                    height: 200,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Scrollbar(
+                                        child: ListView(
+                                          children: <Widget>[
+                                            Text(
+                                              postit.descripcion,
+                                              textAlign: TextAlign.center,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                                Container(
+                                  child: Chip(
+                                    backgroundColor: Colors.white,
+                                    deleteIconColor: Colors.black,
+                                    deleteIcon: Text(postit.valoraciones.toString()),
+                                    onDeleted: (){},
+                                    label: Text(' Valoration: ',
+                                      style: TextStyle(color: Colors.black, fontSize: 10),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         IconButton(
                           //skip_previous
-                          icon: Icon(Icons.skip_next, size: 36.0),
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 30.0,
+                            color: Colors.grey[400],
+                          ),
                           onPressed: () {
                             if (pVigentes.length - 1 > indice) {
                               Navigator.of(context).push(
@@ -118,22 +161,41 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                       ],
                     )),
                 Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text('Perfil'),
-                          onPressed: () {
-                            //ProfileScreen
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(user_id),
-                              ),
-                            );
-                          },
-                        )
+                        Icon(
+                          Icons.person,
+                          color: Colors.teal[200],
+                          size: 20,
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              FlatButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: Colors.teal[200], width: 2)),
+                                color: Colors.white,
+                                child: Text(
+                                  'Back to profile',
+                                  style: TextStyle(color: Colors.teal[200]),
+                                ),
+                                onPressed: () {
+                                  //ProfileScreen
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfileScreen(user_id),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
