@@ -71,7 +71,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 13,
-        unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+        unselectedLabelStyle: TextStyle(fontSize: 11, color: Colors.red),
         unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
         backgroundColor: Colors.grey[200],
         iconSize: 24,
@@ -79,17 +79,17 @@ class _TrendingScreenState extends State<TrendingScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            title: Text("MAPA"),
+            title: Text("MAP"),
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.flash_on,
             ),
-            title: Text("TENDENCIAS"),
+            title: Text("TRENDING"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text("PERFIL"),
+            title: Text("PROFILE"),
           ),
         ],
         currentIndex: _selectedIndex,

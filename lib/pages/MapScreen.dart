@@ -210,24 +210,24 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           selectedFontSize: 13,
-          unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+          unselectedLabelStyle: TextStyle(fontSize: 11, color: Colors.red),
           unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
           backgroundColor: Colors.grey[200],
           iconSize: 24,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
-              title: Text("MAPA"),
+              title: Text("MAP"),
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.flash_on,
               ),
-              title: Text("TENDENCIAS"),
+              title: Text("TRENDING"),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              title: Text("PERFIL"),
+              title: Text("PROFILE"),
             ),
           ],
           currentIndex: _selectedIndex,
@@ -349,7 +349,7 @@ class _MapScreenState extends State<MapScreen> {
                           child: Container(
                             child: RaisedButton(
                               onPressed: () {},
-                              color: Colors.white.withOpacity(0.6),
+                              color: Colors.white.withOpacity(0.5),
                               
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(

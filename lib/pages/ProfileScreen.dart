@@ -115,24 +115,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 13,
-        unselectedLabelStyle: TextStyle(fontSize: 10, color: Colors.red),
+        unselectedLabelStyle: TextStyle(fontSize: 11, color: Colors.red),
         unselectedIconTheme: IconThemeData(size: 12, color: Colors.grey[600]),
         backgroundColor: Colors.grey[200],
         iconSize: 24,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            title: Text("MAPA"),
+            title: Text("MAP"),
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.flash_on,
             ),
-            title: Text("TENDENCIAS"),
+            title: Text("TRENDING"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text("PERFIL"),
+            title: Text("PROFILE"),
           ),
         ],
         currentIndex: _selectedIndex,
@@ -159,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.edit),
-              tooltip: 'Editar perfil',
+              tooltip: 'Edit profile',
               color: Colors.teal,
               highlightColor: Colors.pink[150],
               onPressed: () {
@@ -168,11 +168,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (context) => EditProfileScreen(
                       userId,
                       Objeto(
-                        'Nuevo nombre',
-                        'Nuevo username',
-                        'new email',
-                        '2020',
-                        '2020',
+                        'New name',
+                        'New username',
+                        'New email',
+                        '*****',
+                        '*****',
                       ),
                     ),
                   ),
@@ -210,7 +210,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //Container(color: Colors.white, child: Lista_postits()),
               GranContainer(listaDelUsuario, listaDelUsuario.pVigentes, userId,
                   BigDivider: BigDivider, Divider: Divider),
-              FotoPerfil(),
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 80.0),
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: NetworkImage(listaDelUsuario.foto),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           );
         },
@@ -367,10 +384,7 @@ class FotoPerfil extends StatelessWidget {
         child: Container(
           width: 80,
           height: 80,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.red,
-          ),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
         ),
       ),
     );

@@ -56,37 +56,40 @@ class _NewPostScreenState extends State<NewPostScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 100,
-                        child: Text(
-                          "new post it",
-                          style: TextStyle(fontSize: 30),
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        child: FlatButton(
-                          child: Icon(
-                            Icons.thumbs_up_down,
-                            color: (ocult ? Colors.grey[800] : Colors.teal),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 100,
+                          child: Text(
+                            "new post it",
+                            style: TextStyle(fontSize: 30, color: Colors.teal),
                           ),
-                          onPressed: () {},
-                          onLongPress: () {
-                            setState(() {
-                              ocult = !ocult;
-                            });
-                          },
                         ),
-                      )
-                    ],
+                        Spacer(),
+                        Container(
+                          child: FlatButton(
+                            child: Icon(
+                              Icons.thumbs_up_down,
+                              color: (ocult ? Colors.grey[800] : Colors.teal),
+                            ),
+                            onPressed: () {},
+                            onLongPress: () {
+                              setState(() {
+                                ocult = !ocult;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 8),
                     child: Text(
                       'Title',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
                   TextField(
@@ -110,7 +113,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     padding: const EdgeInsets.only(top: 10, bottom: 8),
                     child: Text(
                       'Description',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
                   Expanded(
@@ -139,7 +142,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     padding: const EdgeInsets.only(top: 10, bottom: 8),
                     child: Text(
                       '#tags',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
                   TextField(

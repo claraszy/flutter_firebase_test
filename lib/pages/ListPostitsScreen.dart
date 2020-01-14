@@ -89,7 +89,8 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                         ),
                         Container(
                           child: Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
                             elevation: 3,
                             color: Colors.grey[300],
                             child: Column(
@@ -124,17 +125,52 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                         ),
                                       ),
                                     )),
-                                Container(
-                                  child: Chip(
-                                    backgroundColor: Colors.white,
-                                    deleteIconColor: Colors.black,
-                                    deleteIcon: Text(postit.valoraciones.toString()),
-                                    onDeleted: (){},
-                                    label: Text(' Valoration: ',
-                                      style: TextStyle(color: Colors.black, fontSize: 10),
-                                      textAlign: TextAlign.center,
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Container(
+                                        child: Chip(
+                                          backgroundColor: Colors.white,
+                                          deleteIconColor: Colors.black,
+                                          deleteIcon: Text(
+                                              postit.valoraciones.toString()),
+                                          onDeleted: () {},
+                                          label: Text(
+                                            ' Valoration: ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 10),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      width: 60,
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.grey[600],
+                                      ),
+                                      onPressed: () {
+                                        postit.caducidad.updateData(
+                                            {'caducidad': Timestamp.now()});
+                                        if (pVigentes.length - 1 > indice) {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ListPostitsScreen(pVigentes,
+                                                      user_id, indice + 1),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    )
+                                  ],
                                 ),
                               ],
                             ),
@@ -177,7 +213,10 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               FlatButton(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: Colors.teal[200], width: 2)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    side: BorderSide(
+                                        color: Colors.teal[200], width: 2)),
                                 color: Colors.white,
                                 child: Text(
                                   'Back to profile',

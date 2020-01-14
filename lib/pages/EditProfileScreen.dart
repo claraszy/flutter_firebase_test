@@ -60,58 +60,78 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Edita tu perfil:'),
-          backgroundColor: Colors.teal[900],
-        ),
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.teal),
+        title: Text('Profile editing', style: TextStyle(fontSize: 18, color: Colors.teal),),
+        backgroundColor: Colors.grey[300],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Name'),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                  style: TextStyle(color: Colors.grey[600]),
+                  controller: _controller[0],
+                  onSubmitted: (what) {},
+                )),
+            Text('Username'),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                                    style: TextStyle(color: Colors.grey[600]),
+
+                  controller: _controller[1],
+                  onSubmitted: (what) {},
+                )),
+            Text('E-mail'),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                                    style: TextStyle(color: Colors.grey[600]),
+
+                  controller: _controller[2],
+                  onSubmitted: (what) {},
+                )),
+            Text('Password'),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                  obscureText: true,
+                  controller: _controller[3],
+                                    style: TextStyle(color: Colors.grey[600]),
+
+                  onSubmitted: (what) {},
+                )),
+            Text('Confirm Password'),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                  obscureText: true,
+                  controller: _controller[4],
+                                    style: TextStyle(color: Colors.grey[600]),
+
+                  onSubmitted: (what) {},
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Nombre'),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextField(
-                      controller: _controller[0],
-                      onSubmitted: (what) {},
-                    )),
-                Text('Username'),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextField(
-                      controller: _controller[1],
-                      onSubmitted: (what) {},
-                    )),
-                Text('E-mail'),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextField(
-                      controller: _controller[2],
-                      onSubmitted: (what) {},
-                    )),
-                Text('Password'),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextField(
-                      controller: _controller[3],
-                      onSubmitted: (what) {},
-                    )),
-                Text('Confirm Password'),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextField(
-                      controller: _controller[4],
-                      onSubmitted: (what) {},
-                    )),
                 RaisedButton(
-                  child: Text('Guardar'),
+                  hoverColor: Colors.teal,
+                  child: Text('Save', style: TextStyle(color: Colors.grey[700]),),
                   onPressed: () {
                     applyChanges(userId, _controller);
                     Navigator.of(context).pop();
                   },
                 ),
               ],
-            )));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
