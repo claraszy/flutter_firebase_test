@@ -343,72 +343,108 @@ class _MapScreenState extends State<MapScreen> {
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.only(top: 35),
                         child: Align(
                           alignment: Alignment.topLeft,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              FloatingActionButton(
-                                heroTag: 'btn1',
-                                onPressed: _onMapTypeButtonPressed,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.padded,
-                                backgroundColor: Colors.grey,
-                                child: const Icon(Icons.satellite, size: 36.0),
-                              ),
-                              //height: 16.0
-                              FloatingActionButton(
-                                heroTag: 'btn2',
-                                //onPressed: () => _onAddMarkerButtonPressed(),
-                                onPressed: () {
-                                  _displayCurrentLocation().then((salida) {
-                                    Navigator.of(context)
-                                        .push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewPostScreen(salida),
+                          child: Container(
+                            child: RaisedButton(
+                              onPressed: () {},
+                              color: Colors.white.withOpacity(0.6),
+                              
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(5),
+                                      bottomRight: Radius.circular(5))),
+                              child: Column(
+                                
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Container(
+                                      width: 40,
+                                      child: FloatingActionButton(
+                                        heroTag: 'btn1',
+                                        onPressed: _onMapTypeButtonPressed,
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.padded,
+                                        backgroundColor: Colors.grey,
+                                        child: const Icon(Icons.satellite,
+                                            size: 20.0),
                                       ),
-                                    )
-                                        .then((id_posit) {
-                                      if (id_posit != null) {
-                                        Firestore.instance
-                                            .collection('usuarios')
-                                            .document(user_id)
-                                            .updateData({
-                                          'pVigentes':
-                                              FieldValue.arrayUnion([id_posit])
-                                        });
-                                      }
-                                    });
-                                  });
-                                },
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.padded,
-                                backgroundColor: Colors.grey,
-                                child:
-                                    const Icon(Icons.add_location, size: 36.0),
+                                    ),
+                                  ),
+                                  //height: 16.0
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Container(
+                                      width: 40,
+                                      child: FloatingActionButton(
+                                        heroTag: 'btn2',
+                                        //onPressed: () => _onAddMarkerButtonPressed(),
+                                        onPressed: () {
+                                          _displayCurrentLocation()
+                                              .then((salida) {
+                                            Navigator.of(context)
+                                                .push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    NewPostScreen(salida),
+                                              ),
+                                            )
+                                                .then((id_posit) {
+                                              if (id_posit != null) {
+                                                Firestore.instance
+                                                    .collection('usuarios')
+                                                    .document(user_id)
+                                                    .updateData({
+                                                  'pVigentes':
+                                                      FieldValue.arrayUnion(
+                                                          [id_posit])
+                                                });
+                                              }
+                                            });
+                                          });
+                                        },
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.padded,
+                                        backgroundColor: Colors.grey,
+                                        child: const Icon(Icons.add_location,
+                                            size: 26.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Container(
+                                      width: 40,
+                                      child: FloatingActionButton(
+                                        heroTag: 'btn3',
+                                        onPressed: () {
+                                          //visible
+                                          setState(() {
+                                            visible = !visible;
+                                          });
+                                          _onAddMarkerButtonPressed(
+                                              lista, lista2, visible);
+                                        },
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.padded,
+                                        backgroundColor: Colors.teal,
+                                        child: const Icon(Icons.remove_red_eye,
+                                            size: 26.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 36,
+                                  ),
+                                ],
                               ),
-                              FloatingActionButton(
-                                heroTag: 'btn3',
-                                onPressed: () {
-                                  //visible
-                                  setState(() {
-                                    visible = !visible;
-                                  });
-                                  _onAddMarkerButtonPressed(
-                                      lista, lista2, visible);
-                                },
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.padded,
-                                backgroundColor: Colors.red,
-                                child: const Icon(Icons.remove_red_eye,
-                                    size: 36.0),
-                              ),
-                              Container(
-                                width: 36,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
