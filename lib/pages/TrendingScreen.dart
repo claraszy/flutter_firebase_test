@@ -155,7 +155,20 @@ class _TrendingScreenState extends State<TrendingScreen> {
                       ),
                       dense: true,
                       //trailing: Text(trendingValoraciones[index].toString() + ' valoraciones'),
-                      onLongPress: () {},
+                      onLongPress: () {
+                        _displayCurrentLocation().then((salida) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => MapScreen(
+                                  salida, this.user_id,
+                                  tag_trending: trendingTags[index]),
+                            ),
+                          );
+                          //print('Geohash');
+                          //print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
+                          //print('Hola');
+                        });
+                      },
                     ),
                   ),
                 );
