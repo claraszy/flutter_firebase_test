@@ -371,13 +371,15 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                     )
                                         .then((id_posit) {
-                                      /*
-                                      TOOOOODOOOOO
-                                      Firestore.instance
-                                      .collection('usuarios')
-                                      .document(user_id).setData('data':id_posit)
-                                      //.add({ who: "third@test.com", when: new Date() })
-                                      */
+                                      if (id_posit != null) {
+                                        Firestore.instance
+                                            .collection('usuarios')
+                                            .document(user_id)
+                                            .updateData({
+                                          'pVigentes':
+                                              FieldValue.arrayUnion([id_posit])
+                                        });
+                                      }
                                     });
                                   });
                                 },
