@@ -234,6 +234,7 @@ class _MapScreenState extends State<MapScreen> {
           selectedItemColor: Colors.teal,
           onTap: _onItemTapped,
         ),
+        drawer: Mydrawer(searchedTags, my_geohash),
         body: Column(
           children: <Widget>[
             Expanded(
