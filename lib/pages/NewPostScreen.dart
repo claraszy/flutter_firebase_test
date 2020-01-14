@@ -1,4 +1,3 @@
-//import 'package:firebase_database/firebase_database.dart';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +38,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final db = Firestore.instance;
   final focus = FocusNode();
 
-  // bool estatOcult = ocult;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +160,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       setState(() {
                         tags.add(etiqueta);
                       });
-                      printTag(tags);
                       _controller[2].clear();
                     },
                   ),
@@ -233,9 +230,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
                             createPostit(posicion, _controller[0],
                                     _controller[1], tags)
                                 .then((salida) {
-                              //TODO
-                              //Devolver la referencia y añadir al usuario que ha hecho el upload
-                              print(salida);
+                              
+                            
                               Navigator.of(context).pop(salida);
                             });
                           }
@@ -251,21 +247,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   createPostit(coordenadas, titulo, descripcion, tags) async {
-    /*await db.collection("postit").document("1").setData({
-                        'title': 'Mastering Flutter',
-                        'description': 'Programming Guide for Dart'
-                      });*/
-    print(coordenadas);
-    print(titulo.text);
-    print(descripcion.text);
-    //print(tags.text);
+   
     DocumentReference ref = await db.collection("postit").add({
       'titulo': titulo.text,
       'descripcion': descripcion.text,
       'caducidad': DateTime.fromMicrosecondsSinceEpoch(
           DateTime.now().microsecondsSinceEpoch + 604800000000),
       'coordenadas': GeoPoint(coordenadas.latitude, coordenadas.longitude),
-      //GeoPoint(41.564191, 2.017206),
       'geohash': Geohash.encode(coordenadas.latitude, coordenadas.longitude)
           .substring(0, 7),
       'valoraciones': 0,

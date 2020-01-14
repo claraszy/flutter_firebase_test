@@ -4,7 +4,6 @@ import 'package:firebase/model/postit.dart';
 import 'package:firebase/pages/ProfileScreen.dart';
 import 'package:firebase/pages/TrendingScreen.dart';
 import 'package:firebase/services/authentification.dart';
-import 'package:firebase/widgets/Drawer.dart';
 import 'package:firebase/pages/NewPostScreen.dart';
 import 'package:firebase/subprogramas/utils.dart';
 import 'package:firebase/widgets/TagRow.dart';
@@ -95,7 +94,6 @@ class _MapScreenState extends State<MapScreen> {
             position: lista_actual[i].posicion,
             icon: BitmapDescriptor.defaultMarker,
             onTap: () {
-              print('Tap');
               showFancyCustomDialog(
                   context, titulo, descripcion, valoracion, tags, referencias);
             }));
@@ -128,7 +126,6 @@ class _MapScreenState extends State<MapScreen> {
               position: lista_entrada[i].posicion,
               icon: BitmapDescriptor.defaultMarker,
               onTap: () {
-                print('Tap');
                 showFancyCustomDialog(context, titulo, descripcion, valoracion,
                     tags, referencias);
               }));
@@ -170,9 +167,7 @@ class _MapScreenState extends State<MapScreen> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     if (index == 1) {
-      //print('userIdMV');
-      //print(userIdMV);
-      //print(user_id);
+      
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => TrendingScreen(this.user_id),
@@ -186,7 +181,6 @@ class _MapScreenState extends State<MapScreen> {
       );
     }
     setState(() {
-      ///////// Cuando tengamos las otras dos páginas, establecemos aquí las rutas
       _selectedIndex = index;
     });
   }
@@ -234,7 +228,6 @@ class _MapScreenState extends State<MapScreen> {
           selectedItemColor: Colors.teal,
           onTap: _onItemTapped,
         ),
-        drawer: Mydrawer(searchedTags, my_geohash),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -253,14 +246,11 @@ class _MapScreenState extends State<MapScreen> {
                         setState(() {
                           searchedTags.add(sTag);
                         });
-                        //print(sTag);
-                        //print(searchedTags);
+                   
 
-                        /// función que llama a la función que crea las chips de Tags
                         printTag(searchedTags);
                       },
                     ),
-                    //labelPadding: EdgeInsets.only(right: 230),
                     backgroundColor: Colors.grey[200],
                     avatar: CircleAvatar(
                       backgroundColor: Colors.grey[200],
@@ -282,8 +272,7 @@ class _MapScreenState extends State<MapScreen> {
               child: StreamBuilder(
                 stream: descargador(searchedTags),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  //print('userIdMV');
-                  //print(userIdMV);
+                 
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -292,42 +281,32 @@ class _MapScreenState extends State<MapScreen> {
                   List<DocumentSnapshot> docs = data.documents;
                   List<Postit> lista = loadData(docs);
 
-                  //print('---------------------');
                   if (userIdMV != null && user_id == '') {
                     user_id = userIdMV;
                   }
 
-                  //print('---------------------');
-                  //print('Fine');
+               
                   _displayCurrentLocation().then((salida) {
                     setState(() {
                       my_geohash =
                           Geohash.encode(salida.latitude, salida.longitude)
                               .substring(0, 7);
-                      //print(my_geohash);
                       _center = salida;
-                      //geohash_actual, geohash_anterior
                       _refresh(lista, lista2, my_geohash, my_geohash_anterior,
                           visible);
                     });
-                    //print('Geohash');
-                    // print(Geohash.encode(my_geohash.latitude, my_geohash.longitude).substring(0, 7));
-                    //print('Hola');
+                  
                   });
                   if (tag_trending != '' && tag_trending != null) {
                     searchedTags.add(tag_trending);
                     tag_trending = '';
-                    //searchedTags
-                    print(tag_trending);
+                    
                   }
 
                   move_move();
-                  //print("Centrooo");
-                  //print(_center);
-                  //print(my_geohash);
+                 
                   return Stack(
                     children: <Widget>[
-                      //Expanded(flex: 1, child: Container(color: Colors.green,)),
                       GoogleMap(
                         onMapCreated: _onMapCreated,
                         initialCameraPosition: CameraPosition(
@@ -351,13 +330,11 @@ class _MapScreenState extends State<MapScreen> {
                             child: RaisedButton(
                               onPressed: () {},
                               color: Colors.white.withOpacity(0.5),
-                              
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(5),
                                       bottomRight: Radius.circular(5))),
                               child: Column(
-                                
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.min,
@@ -377,7 +354,6 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                     ),
                                   ),
-                                  //height: 16.0
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0),
@@ -385,7 +361,6 @@ class _MapScreenState extends State<MapScreen> {
                                       width: 40,
                                       child: FloatingActionButton(
                                         heroTag: 'btn2',
-                                        //onPressed: () => _onAddMarkerButtonPressed(),
                                         onPressed: () {
                                           _displayCurrentLocation()
                                               .then((salida) {
@@ -425,7 +400,6 @@ class _MapScreenState extends State<MapScreen> {
                                       child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () {
-                                          //visible
                                           setState(() {
                                             visible = !visible;
                                           });
@@ -483,7 +457,6 @@ void applyChanges(referencias, valoraciones) {
 
 void showFancyCustomDialog(BuildContext context, titulo, descripcion,
     valoraciones, tags, referencias) {
-  //List<String> tags = ['300', '111', '222', '3333', '444'];
   Dialog fancyDialog = Dialog(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12.0),
@@ -505,7 +478,6 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
             ),
           ),
           Container(
-            //width: double.infinity,
             height: 50,
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
@@ -590,7 +562,6 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
                     ),
                     iconSize: 20,
                     onPressed: () {
-                      //print('has restado');
                       valoraciones = valoraciones - 1;
 
                       applyChanges(referencias, valoraciones);
@@ -612,17 +583,14 @@ void showFancyCustomDialog(BuildContext context, titulo, descripcion,
                       ),
                       onPressed: () {
                         valoraciones = valoraciones + 1;
-                        print(valoraciones);
 
                         applyChanges(referencias, valoraciones);
-                        print('has sumado');
                         Navigator.pop(context);
                       },
                     ),
                   ),
                 ),
                 Container(
-                  //color: Colors.grey,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 100.0),
                     child: Text(valoraciones.toString()),

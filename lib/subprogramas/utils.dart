@@ -27,7 +27,7 @@ List<Postit> loadData(List<DocumentSnapshot> docs) {
 
 Perfil loadDataUser(users) {
   //print(docs);
-  print(users['nValoraciones']);
+
   List auxiliares_pgustados = [];
   List auxiliares_pVigentes = [];
   if (users['pGustados'] != null) {

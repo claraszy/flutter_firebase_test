@@ -31,8 +31,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      print('user_id');
-      print(this.user_id);
+     
       _displayCurrentLocation().then((salida) {
         Navigator.of(context).push(
           MaterialPageRoute(

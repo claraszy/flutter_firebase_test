@@ -193,16 +193,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //print(this.userId);
 
           //print(snapd.data.data);
-          print('HOLA');
-          print(snapd.data.data['alias']);
 
           //List<DocumentSnapshot> alias = snapd.data.data['alias'];
 
           Perfil listaDelUsuario = loadDataUser(snapd.data.data);
 
           List<String> vectorUsuario = [];
-          print('listaDelUsuario.pVigentes');
-          print(listaDelUsuario.pVigentes);
 
           return Stack(
             alignment: AlignmentDirectional.topCenter,

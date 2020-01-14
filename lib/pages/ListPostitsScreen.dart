@@ -21,7 +21,6 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
   List<dynamic> pVigentes;
   String user_id;
   int indice;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
               );
             }
 
-            //snapd.data.data['alias']
+            
             Postit postit = Postit(
                 snapd.data.data['titulo'],
                 snapd.data.data['posicion'],
@@ -66,7 +65,6 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
             for (var i = 0; i < postit.tags.length; i++) {
               postTags.add(postit.tags[i]);
             }
-            print(postTags);
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -175,9 +173,11 @@ class _ListPostitsScreenState extends State<ListPostitsScreen> {
                                         Firestore.instance
                                             .collection('postit')
                                             .document(pVigentes[indice])
-                                            .updateData(
-                                                {'caducidad': Timestamp.fromDate(DateTime.now())});
-                                        
+                                            .updateData({
+                                          'caducidad':
+                                              Timestamp.fromDate(DateTime.now())
+                                        });
+
                                         if (pVigentes.length - 1 > indice) {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
