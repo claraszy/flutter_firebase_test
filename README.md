@@ -1,6 +1,6 @@
 # firebase
 
-A new Flutter project.
+A project made with flutter. Post-it app.
 
 ## Getting Started
 
